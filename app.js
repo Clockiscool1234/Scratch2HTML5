@@ -1,0 +1,5 @@
+createTopBar();
+
+createSplitter();
+createPlayer();
+createLibrary();
