@@ -11,6 +11,7 @@
 	--titlebar: linear-gradient(0deg,var(--tab) 0%, #fff 100%);
 	--off: #8F9193;
 	--arrow: #A6A8AC;
+	--editor: #DDDEDE;
 }
 html, body, div#app {
 	width: 100%;
@@ -141,8 +142,13 @@ div.splitter {
 	align-items: stretch;
 }
 div.splitter div.right {
-	/*! height: 100%; */
 	flex-grow: 1;
+	margin: 5px 5px 5px 0px;
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: 28px 1fr;
+	grid-column-gap: 0px;
+	grid-row-gap: 0px;
 }
 div#app div.leftside {
 	display: grid;
@@ -156,7 +162,7 @@ div.player div.controls {
 	background: var(--titlebar);
 	border-top-left-radius: 6px;
 	border-top-right-radius: 6px;
-	border-bottom: 2px solid var(--border);
+	border-bottom: 1px solid var(--border);
 	display: flex;
 	align-items: center;
 	padding: 10px 0 10px 5px;
@@ -173,9 +179,9 @@ div.player {
 	grid-template-rows: 39px 1fr;
 	grid-column-gap: 0px;
 	grid-row-gap: 0px;
-	border-top-left-radius: 9px;
-	border-top-right-radius: 9px;
-	border: 2px solid var(--border);
+	border-top-left-radius: 7px;
+	border-top-right-radius: 7px;
+	border: 1px solid var(--border);
 	margin: 5px;
 }
 div.player div.controls input {
@@ -185,10 +191,10 @@ div.player div.controls input {
 div.player div.controls button {
 	margin: 0 5px;
 }
-div.player div.controls button#greenf[active="true"] {
+div.player div.controls button#greenf.active {
 	background-image: url(images/593_assets.Resources_flagIcon.png);
 }
-div.player div.controls button#stop[active="true"] {
+div.player div.controls button#stop.active {
 	background-image: url(images/546_assets.Resources_stopOn.png);
 }
 
@@ -231,10 +237,61 @@ div.library div.sprites div.topbar button:last-child {
 	margin-left: 6px;
 }
 
+div.tabs button {
+	background: var(--panel);
+	border: 1px solid var(--border);
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	border-bottom: none;
+	display: flex;
+	align-items: center;
+	padding: 7px 11px 10px 11px;
+	color: var(--off);
+	position: relative;
+	z-index: 1;
+	height: 29px;
+}
+
+div.content {
+	background-color: var(--tab);
+	border: 1px solid var(--border);
+	position: relative;
+	z-index: 3;
+}
+div.content > div {
+	display: none;
+	width: 100%;
+	height: 100%;
+}
+div.content > div.active {
+	display: block;
+}
+div.tabs {
+	display: flex;
+}
+div.tabs button.active, div.tabs button:hover {
+	background: var(--titlebar);
+	color: var(--textcolor);
+	border-bottom: 1px solid var(--tab);
+	z-index: 6;
+}
+
 
 input[type="text"] {
 	box-shadow: inset 1px 1px 1px 0px #0005;
 	border: 1px solid #aaa;
 	border-radius: 3px;
 	height: 20px;
+}
+
+.blocklyFlyout {
+	display: block !important;
+}
+
+.blocklyPath{
+	filter: url(#bevelFilter);
+}
+
+.math_number .blocklyPath{
+	filter: url(#inputBevelFilter);
 }
