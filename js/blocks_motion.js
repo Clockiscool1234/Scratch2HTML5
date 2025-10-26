@@ -15,10 +15,17 @@ Blockly.common.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
   {
     "type": "turnRight:",
     "style": "motion_blocks",
-    "message0": "turn ⟳ %1 degrees",
+    "message0": "turn %1 %2 degrees",
     "nextStatement": null,
     "previousStatement": null,
     "args0": [{
+      "type": "field_image",
+      "src": "images/557_assets.Resources_turnRightIcon.png",
+      "width": 32,
+      "height": 32,
+      "alt": "turn right",
+      "flipRtl": false
+    },{
       "type": "input_value",
       "name": "VALUE1"
     }]
@@ -26,10 +33,17 @@ Blockly.common.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
   {
     "type": "turnLeft:",
     "style": "motion_blocks",
-    "message0": "turn ⟲ %1 degrees",
+    "message0": "turn %1 %2 degrees",
     "nextStatement": null,
     "previousStatement": null,
     "args0": [{
+      "type": "field_image",
+      "src": "images/664_assets.Resources_turnLeftIcon.png",
+      "width": 32,
+      "height": 32,
+      "alt": "turn left",
+      "flipRtl": false
+    },{
       "type": "input_value",
       "name": "VALUE1"
     }]
@@ -55,8 +69,7 @@ Blockly.common.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
       "type": "field_dropdown",
       "name": "VALUE1",
       "options": [
-        [ "mouse-pointer", "ITEM1" ],
-        [ "other sprite here", "ITEM2" ]
+        [ "mouse-pointer", "_mouse_" ]
       ]
     }]
   },
@@ -87,8 +100,7 @@ Blockly.common.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
       "name": "VALUE1",
       "options": [
         [ "mouse-pointer", "_mouse_" ],
-        [ "random position", "_random_"],
-        [ "other sprite here", "ITEM3" ]
+        [ "random position", "_random_"]
       ]
     }]
   },
@@ -192,4 +204,299 @@ Blockly.common.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
     "message0": "direction",
     "output": "value"
   }
-]); // END JSON EXTRACT (Do not delete this comment.)
+]);
+
+const motion_blocks = {
+      "kind": "category",
+      "name": "Motion",
+      "categorystyle": "motion_category",
+      "contents": [{
+          "kind": "block",
+          "type": "forward:",
+          "gap": 16,
+          "inputs": {
+            "VALUE1": {
+              "shadow": {
+                "type": "math_number",
+                "fields": {
+                  "NUM": 10
+                }
+              }
+            }
+          }
+        },
+        {
+          "kind": "block",
+          "type": "turnRight:",
+          "gap": 16,
+          "inputs": {
+            "VALUE1": {
+              "shadow": {
+                "type": "math_number",
+                "fields": {
+                  "NUM": 15
+                }
+              }
+            }
+          }
+        },
+        {
+          "kind": "block",
+          "type": "turnLeft:",
+          "gap": 32,
+          "inputs": {
+            "VALUE1": {
+              "shadow": {
+                "type": "math_number",
+                "fields": {
+                  "NUM": 15
+                }
+              }
+            }
+          }
+        },
+        {
+          "kind": "block",
+          "type": "heading:",
+          "gap": 16,
+          "inputs": {
+            "VALUE1": {
+              "shadow": {
+                "type": "math_number",
+                "fields": {
+                  "NUM": 90
+                }
+              }
+            }
+          }
+        },
+        {
+          "kind": "block",
+          "type": "pointTowards:",
+          "gap": 32
+        },
+        {
+          "kind": "block",
+          "type": "gotoX:y:",
+          "gap": 16,
+          "inputs": {
+            "VALUE1": {
+              "shadow": {
+                "type": "math_number",
+                "fields": {
+                  "NUM": 0
+                }
+              }
+            },
+            "VALUE2": {
+              "shadow": {
+                "type": "math_number",
+                "fields": {
+                  "NUM": 0
+                }
+              }
+            }
+          }
+        },
+        {
+          "kind": "block",
+          "type": "gotoSpriteOrMouse:",
+          "gap": 16
+        },
+        {
+          "kind": "block",
+          "type": "glideSecs:toX:y:elapsed:from:",
+          "gap": 32,
+          "inputs": {
+            "VALUE1": {
+              "shadow": {
+                "type": "math_number",
+                "fields": {
+                  "NUM": 1
+                }
+              }
+            },
+            "VALUE2": {
+              "shadow": {
+                "type": "math_number",
+                "fields": {
+                  "NUM": 0
+                }
+              }
+            },
+            "VALUE3": {
+              "shadow": {
+                "type": "math_number",
+                "fields": {
+                  "NUM": 0
+                }
+              }
+            }
+          }
+        },
+        {
+          "kind": "block",
+          "type": "changeXposBy:",
+          "gap": 16,
+          "inputs": {
+            "VALUE1": {
+              "shadow": {
+                "type": "math_number",
+                "fields": {
+                  "NUM": 10
+                }
+              }
+            }
+          }
+        },
+        {
+          "kind": "block",
+          "type": "xpos:",
+          "gap": 16,
+          "inputs": {
+            "VALUE1": {
+              "shadow": {
+                "type": "math_number",
+                "fields": {
+                  "NUM": 0
+                }
+              }
+            }
+          }
+        },
+        {
+          "kind": "block",
+          "type": "changeYposBy:",
+          "gap": 16,
+          "inputs": {
+            "VALUE1": {
+              "shadow": {
+                "type": "math_number",
+                "fields": {
+                  "NUM": 10
+                }
+              }
+            }
+          }
+        },
+        {
+          "kind": "block",
+          "type": "ypos:",
+          "gap": 32,
+          "inputs": {
+            "VALUE1": {
+              "shadow": {
+                "type": "math_number",
+                "fields": {
+                  "NUM": 0
+                }
+              }
+            }
+          }
+        },
+        {
+          "kind": "block",
+          "type": "bounceOffEdge",
+          "gap": 32
+        },
+        {
+          "kind": "block",
+          "type": "setRotationStyle",
+          "gap": 32
+        },
+        {
+          "kind": "block",
+          "type": "xpos",
+          "gap": 16
+        },
+        {
+          "kind": "block",
+          "type": "ypos",
+          "gap": 16
+        },
+        {
+          "kind": "block",
+          "type": "heading",
+          "gap": 16
+        },
+      ]
+    }
+javascript.javascriptGenerator.forBlock['forward:'] = function (block, generator) {
+  order = javascript.Order.ATOMIC;
+  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `motion.move(${value1});\n`
+}
+javascript.javascriptGenerator.forBlock['turnRight:'] = function (block, generator) {
+  order = javascript.Order.ATOMIC;
+  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `motion.turn(${value1});\n`
+}
+javascript.javascriptGenerator.forBlock['turnLeft:'] = function (block, generator) {
+  order = javascript.Order.ATOMIC;
+  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `motion.turn(${value1*(-1)});\n`
+}
+javascript.javascriptGenerator.forBlock['heading:'] = function (block, generator) {
+  order = javascript.Order.ATOMIC;
+  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `motion.direction(${value1});\n`
+}
+javascript.javascriptGenerator.forBlock['pointTowards:'] = function (block, generator) {
+  return `motion.pointTo("${block.getFieldValue('VALUE1')}");\n`
+}
+javascript.javascriptGenerator.forBlock['gotoX:y:'] = function (block, generator) {
+  order = javascript.Order.ATOMIC;
+  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  value2 = Blockly.JavaScript.valueToCode(block, 'VALUE2', order);
+  return `motion.position(${value1}, ${value2});\n`
+}
+javascript.javascriptGenerator.forBlock['gotoSpriteOrMouse:'] = function (block, generator) {
+  order = javascript.Order.ATOMIC;
+  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `motion.goTo("${value1}");\n`
+}
+javascript.javascriptGenerator.forBlock['glideSecs:toX:y:elapsed:from:'] = function (block, generator) {
+  order = javascript.Order.ATOMIC;
+  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  value2 = Blockly.JavaScript.valueToCode(block, 'VALUE2', order);
+  value3 = Blockly.JavaScript.valueToCode(block, 'VALUE3', order);
+  return `motion.glideTo(${value1}, ${value2}, ${value3});\n`
+}
+javascript.javascriptGenerator.forBlock['changeXposBy:'] = function (block, generator) {
+  order = javascript.Order.ATOMIC;
+  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `motion.changeXpos(${value1});\n`
+}
+javascript.javascriptGenerator.forBlock['xpos:'] = function (block, generator) {
+  order = javascript.Order.ATOMIC;
+  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `motion.xpos(${value1});\n`
+}
+javascript.javascriptGenerator.forBlock['changeYposBy:'] = function (block, generator) {
+  order = javascript.Order.ATOMIC;
+  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `motion.changeYpos(${value1});\n`
+}
+javascript.javascriptGenerator.forBlock['ypos:'] = function (block, generator) {
+  order = javascript.Order.ATOMIC;
+  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `motion.ypos(${value1});\n`
+}
+javascript.javascriptGenerator.forBlock['bounceOffEdge'] = function (block, generator) {
+  return `motion.bounce();\n`
+}
+javascript.javascriptGenerator.forBlock['setRotationStyle'] = function (block, generator) {
+  order = javascript.Order.ATOMIC;
+  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `motion.setRotationStyle(${value1});\n`
+}
+javascript.javascriptGenerator.forBlock['xpos'] = function (block, generator) {
+  return [`motion.xpos`, javascript.Order.ATOMIC]
+}
+javascript.javascriptGenerator.forBlock['ypos'] = function (block, generator) {
+  return [`motion.ypos`, javascript.Order.ATOMIC]
+}
+javascript.javascriptGenerator.forBlock['heading'] = function (block, generator) {
+  return [`motion.direction`, javascript.Order.ATOMIC]
+}
+

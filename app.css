@@ -8,23 +8,27 @@
 	--tab: #E6E8E8;
 	--panel: #F2F2F2;
 	--border: #D0D1D2;
-	--titlebar: linear-gradient(0deg,var(--tab) 0%, #fff 100%);
+	--titlebar: linear-gradient(0deg, var(--tab) 0%, #fff 100%);
 	--off: #8F9193;
 	--arrow: #A6A8AC;
 	--editor: #DDDEDE;
 }
-html, body, div#app {
+
+html,
+body,
+div#app {
 	width: 100%;
 	height: 100%;
 	margin: 0px;
 	color: var(--textcolor);
+	overflow: hidden;
 }
 
 * {
 	font-family: "Arial", "Verdana", "DejaVu Sans";
 }
 
-div#app > div.topbar {
+div#app>div.topbar {
 	background-color: var(--top-bar);
 	width: 100%;
 	height: 28px;
@@ -136,11 +140,13 @@ div.splitter div.left {
 	grid-column-gap: 0px;
 	grid-row-gap: 0px;
 }
+
 div.splitter {
 	height: calc(100% - 28px);
 	display: flex;
 	align-items: stretch;
 }
+
 div.splitter div.right {
 	flex-grow: 1;
 	margin: 5px 5px 5px 0px;
@@ -150,6 +156,7 @@ div.splitter div.right {
 	grid-column-gap: 0px;
 	grid-row-gap: 0px;
 }
+
 div#app div.leftside {
 	display: grid;
 	grid-template-columns: 1fr;
@@ -167,11 +174,13 @@ div.player div.controls {
 	align-items: center;
 	padding: 10px 0 10px 5px;
 }
+
 div.player div.main {
 	background: #fff;
 	height: 360px;
 	width: 100%;
 }
+
 div.player {
 	width: 480px;
 	display: grid;
@@ -184,16 +193,20 @@ div.player {
 	border: 1px solid var(--border);
 	margin: 5px;
 }
+
 div.player div.controls input {
 	flex-grow: 1;
 	margin: 1px 12px 14px 7px;
 }
+
 div.player div.controls button {
 	margin: 0 5px;
 }
+
 div.player div.controls button#greenf.active {
 	background-image: url(images/593_assets.Resources_flagIcon.png);
 }
+
 div.player div.controls button#stop.active {
 	background-image: url(images/546_assets.Resources_stopOn.png);
 }
@@ -208,6 +221,7 @@ div.splitter div.left div.library {
 	border: 1px solid var(--border);
 	background: var(--tab);
 }
+
 div.library div.stage div.topbar {
 	background: var(--titlebar);
 	border-top-left-radius: 6px;
@@ -215,6 +229,7 @@ div.library div.stage div.topbar {
 	border-right: 1px solid var(--border);
 	height: 28px;
 }
+
 div.library div.sprites div.topbar {
 	background: var(--titlebar);
 	border-top-right-radius: 6px;
@@ -258,18 +273,23 @@ div.content {
 	position: relative;
 	z-index: 3;
 }
-div.content > div {
+
+div.content>div {
 	display: none;
 	width: 100%;
 	height: 100%;
 }
-div.content > div.active {
+
+div.content>div.active {
 	display: block;
 }
+
 div.tabs {
 	display: flex;
 }
-div.tabs button.active, div.tabs button:hover {
+
+div.tabs button.active,
+div.tabs button:hover {
 	background: var(--titlebar);
 	color: var(--textcolor);
 	border-bottom: 1px solid var(--tab);
@@ -284,14 +304,63 @@ input[type="text"] {
 	height: 20px;
 }
 
+.blocklyToolbox {
+	height: fit-content !important;	
+}
+
 .blocklyFlyout {
 	display: block !important;
+	background: #E6E8E8;
 }
 
-.blocklyPath{
+.blocklyBlock .blocklyPath {
 	filter: url(#bevelFilter);
+	stroke: none;
 }
 
-.math_number .blocklyPath{
+.math_number .blocklyPath {
 	filter: url(#inputBevelFilter);
+}
+.undefined-renderer.scratch2theme-theme .blocklyText {
+	font-size: 14pt !important;
+	font-family: Lucida Grande, Verdana, Arial, DejaVu Sans, sans-serif;
+	font-weight: 700;
+	fill: #fff;
+	word-spacing: 1px;
+}
+.undefined-renderer.scratch2theme-theme .blocklyEditableField>text {
+	font-weight: 400;
+	font-size: 9px;
+	word-spacing: 0;
+}
+.blocklyToolboxCategoryGroup { /* i love commiting war crimes */
+	display: grid;
+	grid-template-columns: repeat(2, 98px);
+	grid-template-rows: repeat(5, 1fr);
+	grid-column-gap: 2px;
+	grid-row-gap: 2px;
+	padding: 5px;
+	border-bottom: 2px solid var(--border);
+}
+
+.blocklyToolboxCategoryContainer:hover {
+	color: var(--buttonlabel-over);
+	background: none;
+}
+
+.blocklyToolboxCategoryIcon{
+	display: none !important;
+}
+
+.blocklyToolboxCategoryLabel {
+	font-size: 12px;
+}
+
+.blocklyFieldRect.blocklyDropdownRect {
+  fill: #0002;
+  filter: url(#inputBevelFilter);
+}
+
+.blocklyField.blocklyDropdownField.blocklyEditableField image {
+	filter: brightness(0);
 }

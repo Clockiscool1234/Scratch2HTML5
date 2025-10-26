@@ -1,51 +1,8 @@
-/**
- * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-
-'use strict';
-console.log("movement block load");
-goog.provide('Blockly.Blocks.colour'); // Deprecated
-goog.provide('Blockly.Constants.Colour');
-
-goog.require('Blockly.Blocks');
-
-
-/**
- * Common HSV hue for all blocks in this category.
- * This should be the same as Blockly.Msg.COLOUR_HUE.
- * @readonly
- */
-Blockly.Constants.Colour.HUE = 20;
-/** @deprecated Use Blockly.Constants.Colour.HUE */
-Blockly.Blocks.colour.HUE = Blockly.Constants.Colour.HUE;
-
-
-
-   
-    // <block type="comeToFront"></block>0
-    // <block type="goBackByLayers:"></block>1
-Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
+Blockly.common.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
   {
     "type": "say:duration:elapsed:from:",
+    "style": "looks_blocks",
     "message0": "say %1 for %2 secs",
-    "colour":264,
     "nextStatement": null,
     "previousStatement": null,
     "args0": [{
@@ -58,8 +15,8 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
   },
   {
     "type": "say:",
+    "style": "looks_blocks",
     "message0": "say %1",
-    "colour":264,
     "nextStatement": null,
     "previousStatement": null,
     "args0": [{
@@ -69,8 +26,8 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
   },
   {
     "type": "think:duration:elapsed:from:",
+    "style": "looks_blocks",
     "message0": "think %1 for %2 secs",
-    "colour":264,
     "nextStatement": null,
     "previousStatement": null,
     "args0": [{
@@ -83,8 +40,8 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
   },
   {
     "type": "think:",
+    "style": "looks_blocks",
     "message0": "think %1",
-    "colour":264,
     "nextStatement": null,
     "previousStatement": null,
     "args0": [{
@@ -94,73 +51,71 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
   },
   {
     "type": "show",
+    "style": "looks_blocks",
     "message0": "show",
-    "colour":264,
     "nextStatement": null,
     "previousStatement": null
   },
   {
     "type": "hide",
+    "style": "looks_blocks",
     "message0": "hide",
-    "colour":264,
     "nextStatement": null,
     "previousStatement": null
   },
   {
-    "type": "lookLike:",
+    "type": "lookLike",
+    "style": "looks_blocks",
     "message0": "switch costume to %1",
-    "colour":264,
     "nextStatement": null,
     "previousStatement": null,
     "args0": [{
       "type": "field_dropdown",
       "name": "FIELDNAME",
       "options": [
-        [ "costume1", "ITEM1" ],
-        [ "costume2", "ITEM2" ]
+        [ "costume1", "ITEM1" ]
       ]
     }]
   },
   {
     "type": "nextCostume",
+    "style": "looks_blocks",
     "message0": "next costume",
-    "colour":264,
     "nextStatement": null,
     "previousStatement": null
   },
   {
     "type": "startScene",
+    "style": "looks_blocks",
     "message0": "switch backdrop to %1",
-    "colour":264,
     "nextStatement": null,
     "previousStatement": null,
     "args0": [{
       "type": "field_dropdown",
       "name": "VALUE1",
       "options": [
-        [ "backdrop1", "ITEM1" ],
-        [ "next backdrop", "ITEM2" ],
-        [ "previous backdrop", "ITEM3" ]
+        [ "next backdro‍p", "_next_" ],
+        [ "previous backdrop", "_prev_" ]
       ]
     }]
   },
   {
     "type": "changeGraphicEffect:by:",
+    "style": "looks_blocks",
     "message0": "change %1 effect by %2",
-    "colour":264,
     "nextStatement": null,
     "previousStatement": null,
     "args0": [{
       "type": "field_dropdown",
       "name": "VALUE1",
       "options": [
-        [ "color", "ITEM1" ],
-        [ "fisheye", "ITEM2" ],
-        [ "whirl", "ITEM3" ],
-        [ "pixelate", "ITEM4" ],
-        [ "mosaic", "ITEM5" ],
-        [ "brightness", "ITEM6" ],
-        [ "ghost", "ITEM7" ]
+        [ "color", "color" ],
+        [ "fisheye", "fisheye" ],
+        [ "whirl", "whirl" ],
+        [ "pixelate", "pixelate" ],
+        [ "mosaic", "mosaic" ],
+        [ "brightness", "brightness" ],
+        [ "ghost", "ghost" ]
         
       ]
     },{
@@ -170,8 +125,8 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
   },
   {
     "type": "setGraphicEffect:to:",
+    "style": "looks_blocks",
     "message0": "set %1 effect to %2",
-    "colour":264,
     "nextStatement": null,
     "previousStatement": null,
     "args0": [{
@@ -194,15 +149,15 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
   },
   {
     "type": "filterReset",
+    "style": "looks_blocks",
     "message0": "clear graphic effects",
-    "colour":264,
     "nextStatement": null,
     "previousStatement": null
   },
   {
     "type": "changeSizeBy:",
+    "style": "looks_blocks",
     "message0": "change size by %1",
-    "colour":264,
     "nextStatement": null,
     "previousStatement": null,
     "args0": [{
@@ -212,8 +167,8 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
   },
   {
     "type": "setSizeTo:",
+    "style": "looks_blocks",
     "message0": "set size to %1",
-    "colour":264,
     "nextStatement": null,
     "previousStatement": null,
     "args0": [{
@@ -223,15 +178,15 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
   },
   {
     "type": "comeToFront",
+    "style": "looks_blocks",
     "message0": "go to front",
-    "colour":264,
     "nextStatement": null,
     "previousStatement": null
   },
   {
     "type": "goBackByLayers:",
+    "style": "looks_blocks",
     "message0": "go back %1 layers",
-    "colour":264,
     "nextStatement": null,
     "previousStatement": null,
     "args0": [{
@@ -241,20 +196,209 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
   },
   {
     "type": "costumeIndex",
+    "style": "looks_blocks",
     "message0": "costume #",
-    "colour":264,
     "output": "value"
   },
   {
     "type": "sceneName",
+    "style": "looks_blocks",
     "message0": "backdrop name",
-    "colour":264,
     "output": "value"
   },
   {
     "type": "scale",
+    "style": "looks_blocks",
     "message0": "size",
-    "colour":264,
     "output": "value"
   }
-]); // END JSON EXTRACT (Do not delete this comment.)
+]);
+
+
+const looks_blocks = {
+      "kind": "category",
+      "name": "Looks",
+      "categorystyle": "looks_category",
+      "contents": [{
+          "kind": "block",
+          "type": "say:duration:elapsed:from:",
+          "gap": 16,
+          "inputs": {
+            "VALUE1": {
+              "shadow": {
+                "type": "text",
+                "fields": {
+                  "TEXT": "Hello!"
+                }
+              }
+            },
+            "VALUE2": {
+              "shadow": {
+                "type": "math_number",
+                "fields": {
+                  "NUM": 2
+                }
+              }
+            }
+          }
+        },{
+          "kind": "block",
+          "type": "say:",
+          "gap": 16,
+          "inputs": {
+            "VALUE1": {
+              "shadow": {
+                "type": "text",
+                "fields": {
+                  "TEXT": "Hello!"
+                }
+              }
+            }
+          }
+        },{
+          "kind": "block",
+          "type": "think:duration:elapsed:from:",
+          "gap": 16,
+          "inputs": {
+            "VALUE1": {
+              "shadow": {
+                "type": "text",
+                "fields": {
+                  "TEXT": "Hmm..."
+                }
+              }
+            },
+            "VALUE2": {
+              "shadow": {
+                "type": "math_number",
+                "fields": {
+                  "NUM": 2
+                }
+              }
+            }
+          }
+        },{
+          "kind": "block",
+          "type": "think:",
+          "gap": 32,
+          "inputs": {
+            "VALUE1": {
+              "shadow": {
+                "type": "text",
+                "fields": {
+                  "TEXT": "Hmm..."
+                }
+              }
+            }
+          }
+        },{
+          "kind": "block",
+          "type": "show",
+          "gap": 16
+        },{
+          "kind": "block",
+          "type": "hide",
+          "gap": 32
+        },{
+          "kind": "block",
+          "type": "lookLike",
+          "gap": 16
+        },{
+          "kind": "block",
+          "type": "nextCostume",
+          "gap": 16
+        },{
+          "kind": "block",
+          "type": "startScene",
+          "gap": 32
+        },{
+          "kind": "block",
+          "type": "changeGraphicEffect:by:",
+          "gap": 16,
+          "inputs": {
+            "VALUE2": {
+              "shadow": {
+                "type": "math_number",
+                "fields": {
+                  "NUM": 25
+                }
+              }
+            }
+          }
+        },{
+          "kind": "block",
+          "type": "setGraphicEffect:to:",
+          "gap": 16,
+          "inputs": {
+            "VALUE2": {
+              "shadow": {
+                "type": "math_number",
+                "fields": {
+                  "NUM": 0
+                }
+              }
+            }
+          }
+        },{
+          "kind": "block",
+          "type": "filterReset",
+          "gap": 32
+        },{
+          "kind": "block",
+          "type": "changeSizeBy:",
+          "gap": 16,
+          "inputs": {
+            "VALUE1": {
+              "shadow": {
+                "type": "math_number",
+                "fields": {
+                  "NUM": 10
+                }
+              }
+            }
+          }
+        },{
+          "kind": "block",
+          "type": "setSizeTo:",
+          "gap": 32,
+          "inputs": {
+            "VALUE1": {
+              "shadow": {
+                "type": "math_number",
+                "fields": {
+                  "NUM": 100
+                }
+              }
+            }
+          }
+        },{
+          "kind": "block",
+          "type": "comeToFront",
+          "gap": 16
+        },{
+          "kind": "block",
+          "type": "goBackByLayers:",
+          "gap": 32,
+          "inputs": {
+            "VALUE1": {
+              "shadow": {
+                "type": "math_number",
+                "fields": {
+                  "NUM": 1
+                }
+              }
+            }
+          }
+        },{
+          "kind": "block",
+          "type": "costumeIndex",
+          "gap": 16
+        },{
+          "kind": "block",
+          "type": "sceneName",
+          "gap": 16
+        },{
+          "kind": "block",
+          "type": "scale"
+        }]
+    }

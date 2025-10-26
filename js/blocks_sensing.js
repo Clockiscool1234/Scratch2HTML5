@@ -1,47 +1,4 @@
-/**
- * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-
-'use strict';
-console.log("sensing block load");
-goog.provide('Blockly.Blocks.colour'); // Deprecated
-goog.provide('Blockly.Constants.Colour');
-
-goog.require('Blockly.Blocks');
-
-
-/**
- * Common HSV hue for all blocks in this category.
- * This should be the same as Blockly.Msg.COLOUR_HUE.
- * @readonly
- */
-Blockly.Constants.Colour.HUE = 200;
-/** @deprecated Use Blockly.Constants.Colour.HUE */
-Blockly.Blocks.colour.HUE = Blockly.Constants.Colour.HUE;
-
-
-
-
-// <block type="comeToFront"></block>0
-// <block type="goBackByLayers:"></block>1
-Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
+Blockly.defineBlocksWithJsonArray([
   {
     "type": "touching:",
     "message0": 'touching %1',
@@ -54,31 +11,31 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
         ["other sprite here", "ITEM3"]
       ]
     }],
-    "colour": 200,
+    "style": "sensing_blocks",
     "output": "Boolean"
   }, {
     "type": "touchingColor:",
     "message0": "touching color %1 ?",
     "args0": [{
-      "type": "input_value",
+      "type": "field_colour_hsv_sliders",
       "name": "VALUE1",
-      "check": "Colour"
+      "colour": "#ff0000"
     }],
-    "colour": 200,
+    "style": "sensing_blocks",
     "output": "Boolean"
   }, {
     "type": "color:sees:",
     "message0": "color %1 is touching color %2 ?",
     "args0": [{
-      "type": "input_value",
+      "type": "field_colour_hsv_sliders",
       "name": "VALUE1",
-      "check": "Colour"
+      "colour": "#ff0000"
     }, {
-      "type": "input_value",
+      "type": "field_colour_hsv_sliders",
       "name": "VALUE2",
-      "check": "Colour"
+      "colour": "#ff0000"
     }],
-    "colour": 200,
+    "style": "sensing_blocks",
     "output": "Boolean"
   }, {
     "type": "distanceTo:",
@@ -91,12 +48,12 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
         ["other sprite here", "ITEM2"]
       ]
     }],
-    "colour": 200,
+    "style": "sensing_blocks",
     "output": "value"
   }, {
     "type": "doAsk",
     "message0": "ask %1 and wait",
-    "colour": 200,
+    "style": "sensing_blocks",
     "nextStatement": null,
     "previousStatement": null,
     "args0": [{
@@ -106,7 +63,7 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
   }, {
     "type": "answer",
     "message0": "answer",
-    "colour": 200,
+    "style": "sensing_blocks",
     "output": "value"
   }, {
     "type": "keyPressed:",
@@ -159,27 +116,27 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
         ["9", "9"]
       ]
     }],
-    "colour": 200,
+    "style": "sensing_blocks",
     "output": "Boolean"
   }, {
     "type": "mousePressed",
     "message0": "mouse down?",
-    "colour": 200,
+    "style": "sensing_blocks",
     "output": "Boolean"
   }, {
     "type": "mouseX",
     "message0": "mouse x",
-    "colour": 200,
+    "style": "sensing_blocks",
     "output": "value"
   }, {
     "type": "mouseY",
     "message0": "mouse y",
-    "colour": 200,
+    "style": "sensing_blocks",
     "output": "value"
   }, {
     "type": "soundLevel",
     "message0": "loudness",
-    "colour": 200,
+    "style": "sensing_blocks",
     "output": "value"
   }, {
     "type": "senseVideoMotion",
@@ -199,7 +156,7 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
         ["this sprite", "ITEM2"]
       ]
     }],
-    "colour": 200,
+    "style": "sensing_blocks",
     "output": "value"
   }, {
     "type": "setVideoState",
@@ -213,12 +170,13 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
         ["on-flipped", "ITEM3"]
       ]
     }],
-    "colour": 200,
-    "output": "value"
+    "style": "sensing_blocks",
+    "nextStatement": null,
+    "previousStatement": null
   }, {
     "type": "setVideoTransparency",
     "message0": "set video transparency to %1%",
-    "colour": 200,
+    "style": "sensing_blocks",
     "nextStatement": null,
     "previousStatement": null,
     "args0": [{
@@ -228,12 +186,12 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
   }, {
     "type": "timer",
     "message0": "timer",
-    "colour": 200,
+    "style": "sensing_blocks",
     "output": "value"
   }, {
     "type": "timerReset",
     "message0": "reset timer",
-    "colour": 200,
+    "style": "sensing_blocks",
     "nextStatement": null,
     "previousStatement": null
   }, {
@@ -259,7 +217,7 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
         ["Sprite1", "Sprite1"]
       ]
     }],
-    "colour": 200,
+    "style": "sensing_blocks",
     "output": "value"
   }, {
     "type": "timeAndDate",
@@ -277,20 +235,144 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
         ["second", "second"]
       ]
     }],
-    "colour": 200,
+    "style": "sensing_blocks",
     "output": "value"
   }, {
     "type": "timestamp",
     "message0": "days since 2000",
-    "colour": 200,
+    "style": "sensing_blocks",
     "output": "value"
   }, {
     "type": "getUserName",
     "message0": "username",
-    "colour": 200,
+    "style": "sensing_blocks",
     "output": "value"
-  },
+  }
+]);
 
-]); // END JSON EXTRACT (Do not delete this comment.)
-
-
+const sensing_blocks = {
+      "kind": "category",
+      "name": "Sensing",
+      "categorystyle": "sensing_category",
+      "contents": [
+        {
+            "kind": "block",
+            "type": "touching:",
+            "gap": 16
+        },
+        {
+            "kind": "block",
+            "type": "touchingColor:",
+            "gap": 16
+        },
+        {
+            "kind": "block",
+            "type": "color:sees:",
+            "gap": 16
+        },
+        {
+            "kind": "block",
+            "type": "distanceTo:",
+            "gap": 32
+        },
+        {
+            "kind": "block",
+            "type": "doAsk",
+            "gap": 16,
+            "inputs": {
+              "VALUE1": {
+                "shadow": {
+                  "type": "text",
+                  "fields": {
+                    "TEXT": "What's your name?"
+                  }
+                }
+              }
+            }
+        },
+        {
+            "kind": "block",
+            "type": "answer",
+            "gap": 32
+        },
+        {
+            "kind": "block",
+            "type": "keyPressed:",
+            "gap": 16
+        },
+        {
+            "kind": "block",
+            "type": "mousePressed",
+            "gap": 16
+        },
+        {
+            "kind": "block",
+            "type": "mouseX",
+            "gap": 16
+        },
+        {
+            "kind": "block",
+            "type": "mouseY",
+            "gap": 32
+        },
+        {
+            "kind": "block",
+            "type": "soundLevel",
+            "gap": 32
+        },
+        {
+            "kind": "block",
+            "type": "senseVideoMotion",
+            "gap": 16
+        },
+        {
+            "kind": "block",
+            "type": "setVideoState",
+            "gap": 16
+        },
+        {
+            "kind": "block",
+            "type": "setVideoTransparency",
+            "gap": 32,
+            "inputs": {
+              "VALUE1": {
+                "shadow": {
+                  "type": "math_number",
+                  "fields": {
+                    "NUM": 50
+                  }
+                }
+              }
+            }
+        },
+        {
+            "kind": "block",
+            "type": "timer",
+            "gap": 16
+        },
+        {
+            "kind": "block",
+            "type": "timerReset",
+            "gap": 32
+        },
+        {
+            "kind": "block",
+            "type": "getAttribute:of:",
+            "gap": 32
+        },
+        {
+            "kind": "block",
+            "type": "timeAndDate",
+            "gap": 16
+        },
+        {
+            "kind": "block",
+            "type": "timestamp",
+            "gap": 16
+        },
+        {
+            "kind": "block",
+            "type": "getUserName"
+        }
+      ]
+    }
