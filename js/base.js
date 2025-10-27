@@ -64,3 +64,65 @@ function createTabs(){
 	document.querySelector(".splitter .right").appendChild(tabs);
 	document.querySelector(".splitter .right").appendChild(content);
 }
+function extractMultipleFunctionBlocks(codeString, functionNames) {
+    const extractedBlocks = {};
+    const normalizedCode = codeString.replace(/\s+/g, ' ').trim(); 
+    functionNames.forEach(functionName => {
+        extractedBlocks[functionName] = [];
+        const escapedFunctionName = functionName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const funcRegex = new RegExp(`${escapedFunctionName}\\s*\\(`, 'g');
+        let match;
+        while ((match = funcRegex.exec(normalizedCode)) !== null) {
+            let startIndex = match.index;
+            let blockStart = normalizedCode.indexOf('{', startIndex);
+            if (blockStart === -1) {
+                continue;
+            }
+            let braceCount = 1;
+            let blockEnd = -1;
+            for (let i = blockStart + 1; i < normalizedCode.length; i++) {
+                const char = normalizedCode[i];
+                if (char === '{') {
+                    braceCount++;
+                } else if (char === '}') {
+                    braceCount--;
+                }
+                if (braceCount === 0) {
+                    blockEnd = i;
+                    break;
+                }
+            }
+            if (blockEnd !== -1) {
+                let extractedContent = normalizedCode.substring(startIndex, blockEnd + 1);
+                const closingSuffix = normalizedCode.substring(blockEnd + 1);
+                const suffixEnd = closingSuffix.indexOf(');');
+                if (suffixEnd !== -1) {
+                     extractedContent += closingSuffix.substring(0, suffixEnd + 2);
+                }
+                extractedBlocks[functionName].push(extractedContent.trim());
+                funcRegex.lastIndex = blockEnd + 1;
+            } else {
+                funcRegex.lastIndex = startIndex + 1; 
+            }
+        }
+    });
+
+
+    var output = "";
+    Object.keys(extractedBlocks).forEach(funcName => {
+        extractedBlocks[funcName].forEach(item => {
+            const formattedItem = item
+                .replace(/\{/g, '{\n  ') 
+                .replace(/\}/g, '\n}') 
+                .replace(/;\s*/g, ';\n  ') 
+                .replace(/\(\)\s*\{/g, '() {')
+                .replace(/\n\s*;\n\s*\}/g, ';\n}') 
+                .replace(/\n\s*\}\);/g, '\n});') 
+                .replace(/\n\s\s\}/g, '\n}')
+                .replace(/\n\s\s\);/g, '\n);')
+                .trim();
+            output += formattedItem + "\n\n";
+        });
+    });
+    return output.replace(/\n\n+/g, '\n\n').trim();
+}

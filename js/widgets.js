@@ -36,7 +36,8 @@ function createMenu(id, name, option) {
 	const menu = document.createElement("ul");
 	option.forEach(function(i){
 		var menuitems = document.createElement("li");
-		menuitems.innerText = i;
+		menuitems.innerText = i.name;
+		menuitems.addEventListener("click", ()=>{document.querySelector("button#"+id).blur();i.func()});
 		menu.appendChild(menuitems);
 	})
 	menubtn.appendChild(menu);
@@ -63,7 +64,8 @@ function createIconMenu(id, img, secondary_img, option, w, h) {
 	const menu = document.createElement("ul");
 	option.forEach(function(i){
 		var menuitems = document.createElement("li");
-		menuitems.innerText = i;
+		menuitems.innerText = i.name;
+		menuitems.addEventListener("click", ()=>{document.querySelector("button#"+id).blur();i.func()});
 		menu.appendChild(menuitems);
 	})
 	menubtn.appendChild(style);
@@ -77,3 +79,65 @@ function createMenuBtn(id, name) {
 	menubtn.type = "menubtn"
 	return menubtn;
 }
+function createContextMenu(id, option, x, y) {
+	document.querySelectorAll("ul.contextmenu").forEach(function(i){
+		i.remove();
+	});
+	const menu = document.createElement("ul");
+	menu.id = id;
+	menu.classList.add("contextmenu")
+	option.forEach(function(i){
+		var menuitems = document.createElement("li");
+		menuitems.innerText = i.name;
+		menuitems.addEventListener("click", ()=>{document.querySelector("ul.contextmenu#"+id).remove();i.func()});
+		menu.appendChild(menuitems);
+	})
+	menu.style.top = y + "px";
+	menu.style.left = x + "px";
+	document.querySelector("div#app").appendChild(menu);
+}
+function createDialog(id, title, content, buttons=null, html=false, w=null, h=null){
+	const dialog = document.createElement('div');
+	dialog.classList.add('dialog');
+	dialog.id = id;
+	dialog.style.width = w+"px";
+	dialog.style.height = h+"px";
+	const titletext = document.createElement('span');
+	titletext.textContent = title;
+	const contentdiv = document.createElement('div');
+	if (!html) {
+		const text = document.createElement('span');
+		text.innerHTML = content.replace(/\n/g, "<br>");
+		contentdiv.appendChild(text);
+	} else {
+		contentdiv.appendChild(content);
+	}
+	const footer = document.createElement('footer');
+	if(buttons){
+		Object.keys(buttons).forEach(function(item){
+			button = document.createElement('button');
+			button.type = 'button';
+			button.textContent = buttons[item].text;
+			button.addEventListener("click", function(){typeof(buttons[item].func) == "undefined" ? null : buttons[item].func(); dialog.remove()} )
+			footer.appendChild(button);
+		});
+	} else {
+		button = document.createElement('button');
+		button.type = 'button';
+		button.textContent = "OK";
+		button.addEventListener("click", function(){dialog.remove()})
+		footer.appendChild(button);
+	}
+	dialog.appendChild(titletext);
+	dialog.appendChild(contentdiv);
+	dialog.appendChild(footer);
+	document.querySelector("div#app").appendChild(dialog);
+}
+
+document.addEventListener('click', function(event) {
+	document.querySelectorAll("ul.contextmenu").forEach((i)=>{
+	    if (i && !i.contains(event.target)) {
+	        i.remove();
+	    }
+    });
+});

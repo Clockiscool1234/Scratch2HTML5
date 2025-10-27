@@ -1,5 +1,4 @@
-
-Blockly.common.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
+Blockly.common.defineBlocksWithJsonArray([ 
   {
     "type": "forward:",
     "style": "motion_blocks",
@@ -68,9 +67,14 @@ Blockly.common.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
     "args0": [{
       "type": "field_dropdown",
       "name": "VALUE1",
-      "options": [
-        [ "mouse-pointer", "_mouse_" ]
-      ]
+      "options": function(){
+        options = [];
+        options.push(["mouse-pointer", "_mouse_"]);
+        Object.keys(ScratchRuntime.Project.sprites).forEach(function(item){
+          item == "_stage_" || item == document.querySelector("div.item.selected").id? null : options.push([item, item]);
+        });
+        return options;
+      }
     }]
   },
   {
@@ -98,10 +102,15 @@ Blockly.common.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
     "args0": [{
       "type": "field_dropdown",
       "name": "VALUE1",
-      "options": [
-        [ "mouse-pointer", "_mouse_" ],
-        [ "random position", "_random_"]
-      ]
+      "options": function(){
+        options = [];
+        options.push(["mouse-pointer", "_mouse_"]);
+        options.push(["random position", "_random_"]);
+        Object.keys(ScratchRuntime.Project.sprites).forEach(function(item){
+          item == "_stage_" || item == document.querySelector("div.item.selected").id? null : options.push([item, item]);
+        });
+        return options;
+      }
     }]
   },
   {
@@ -210,6 +219,8 @@ const motion_blocks = {
       "kind": "category",
       "name": "Motion",
       "categorystyle": "motion_category",
+      "toolboxitemid": "motion_stage0",
+      "hidden": "true",
       "contents": [{
           "kind": "block",
           "type": "forward:",
@@ -420,74 +431,91 @@ const motion_blocks = {
           "gap": 16
         },
       ]
-    }
+    };
+
+const motion_blocks_stage = {
+      "kind": "category",
+      "name": "Motion",
+      "categorystyle": "motion_category",
+      "toolboxitemid": "motion_stage1",
+      "contents": [
+        {
+          "kind": "label",
+          "text": "Stage selected:"
+        },
+        {
+          "kind": "label",
+          "text": "No motion blocks"
+        }
+      ]
+    };
 javascript.javascriptGenerator.forBlock['forward:'] = function (block, generator) {
-  order = javascript.Order.ATOMIC;
-  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  const order = javascript.Order.ATOMIC;
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
   return `motion.move(${value1});\n`
 }
 javascript.javascriptGenerator.forBlock['turnRight:'] = function (block, generator) {
-  order = javascript.Order.ATOMIC;
-  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  const order = javascript.Order.ATOMIC;
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
   return `motion.turn(${value1});\n`
 }
 javascript.javascriptGenerator.forBlock['turnLeft:'] = function (block, generator) {
-  order = javascript.Order.ATOMIC;
-  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  const order = javascript.Order.ATOMIC;
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
   return `motion.turn(${value1*(-1)});\n`
 }
 javascript.javascriptGenerator.forBlock['heading:'] = function (block, generator) {
-  order = javascript.Order.ATOMIC;
-  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  const order = javascript.Order.ATOMIC;
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
   return `motion.direction(${value1});\n`
 }
 javascript.javascriptGenerator.forBlock['pointTowards:'] = function (block, generator) {
   return `motion.pointTo("${block.getFieldValue('VALUE1')}");\n`
 }
 javascript.javascriptGenerator.forBlock['gotoX:y:'] = function (block, generator) {
-  order = javascript.Order.ATOMIC;
-  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
-  value2 = Blockly.JavaScript.valueToCode(block, 'VALUE2', order);
+  const order = javascript.Order.ATOMIC;
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  const value2 = Blockly.JavaScript.valueToCode(block, 'VALUE2', order);
   return `motion.position(${value1}, ${value2});\n`
 }
 javascript.javascriptGenerator.forBlock['gotoSpriteOrMouse:'] = function (block, generator) {
-  order = javascript.Order.ATOMIC;
-  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  const order = javascript.Order.ATOMIC;
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
   return `motion.goTo("${value1}");\n`
 }
 javascript.javascriptGenerator.forBlock['glideSecs:toX:y:elapsed:from:'] = function (block, generator) {
-  order = javascript.Order.ATOMIC;
-  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
-  value2 = Blockly.JavaScript.valueToCode(block, 'VALUE2', order);
-  value3 = Blockly.JavaScript.valueToCode(block, 'VALUE3', order);
+  const order = javascript.Order.ATOMIC;
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  const value2 = Blockly.JavaScript.valueToCode(block, 'VALUE2', order);
+  const value3 = Blockly.JavaScript.valueToCode(block, 'VALUE3', order);
   return `motion.glideTo(${value1}, ${value2}, ${value3});\n`
 }
 javascript.javascriptGenerator.forBlock['changeXposBy:'] = function (block, generator) {
-  order = javascript.Order.ATOMIC;
-  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  const order = javascript.Order.ATOMIC;
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
   return `motion.changeXpos(${value1});\n`
 }
 javascript.javascriptGenerator.forBlock['xpos:'] = function (block, generator) {
-  order = javascript.Order.ATOMIC;
-  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  const order = javascript.Order.ATOMIC;
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
   return `motion.xpos(${value1});\n`
 }
 javascript.javascriptGenerator.forBlock['changeYposBy:'] = function (block, generator) {
-  order = javascript.Order.ATOMIC;
-  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  const order = javascript.Order.ATOMIC;
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
   return `motion.changeYpos(${value1});\n`
 }
 javascript.javascriptGenerator.forBlock['ypos:'] = function (block, generator) {
-  order = javascript.Order.ATOMIC;
-  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  const order = javascript.Order.ATOMIC;
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
   return `motion.ypos(${value1});\n`
 }
 javascript.javascriptGenerator.forBlock['bounceOffEdge'] = function (block, generator) {
   return `motion.bounce();\n`
 }
 javascript.javascriptGenerator.forBlock['setRotationStyle'] = function (block, generator) {
-  order = javascript.Order.ATOMIC;
-  value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  const order = javascript.Order.ATOMIC;
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
   return `motion.setRotationStyle(${value1});\n`
 }
 javascript.javascriptGenerator.forBlock['xpos'] = function (block, generator) {
@@ -499,4 +527,3 @@ javascript.javascriptGenerator.forBlock['ypos'] = function (block, generator) {
 javascript.javascriptGenerator.forBlock['heading'] = function (block, generator) {
   return [`motion.direction`, javascript.Order.ATOMIC]
 }
-

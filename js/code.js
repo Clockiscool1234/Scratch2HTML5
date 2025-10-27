@@ -3,8 +3,6 @@ var wtoolbox
 
 function createCodePage() {
 	function defineFilter(workspace) {
-
-		// The raw <filter> SVG string you provided
 		const filterString = `
 	    <filter id="bevelFilter" y0="-50%" x0="-50%" height="200%" width="200%">
 	      <feGaussianBlur in="SourceAlpha" stdDeviation="1 1" result="blur-1"></feGaussianBlur>
@@ -42,19 +40,12 @@ function createCodePage() {
 		const svg = workspace.getParentSvg();
 		let defs = svg.querySelector('defs');
 		if (!defs) {
-			// Create <defs> if it doesn't exist
 			defs = Blockly.utils.dom.createSvgElement('defs', {}, svg);
 		}
-
-
-		// Add your filter string to the <defs>
-		// Using insertAdjacentHTML is safer than .innerHTML +=
-		// as it avoids re-parsing the existing definitions.
 		defs.insertAdjacentHTML('beforeend', filterString);
 	}
 	class S2ConstantProvider extends Blockly.zelos.ConstantProvider {
 		constructor() {
-			// Set up all of the constants from the base provider.
 			super();
 
 			this.SMALL_PADDING = this.GRID_UNIT;
@@ -93,19 +84,15 @@ function createCodePage() {
 		    this.START_HAT_HEIGHT = 30;
 		}
 		makeStartHat() {
-    // This is where you define the custom shape.
-    // This example is conceptual; you'd need real SVG path math.
-    const width = this.START_HAT_WIDTH;
-    const height = this.START_HAT_HEIGHT;
+		    const width = this.START_HAT_WIDTH;
+		    const height = this.START_HAT_HEIGHT;
 
-    return {
-      width: 0,
-      height: 20,
-      // Define the SVG path for your new hat shape (e.g., a simple peak)
-      // The path must use relative coordinates.
-      path: `c 25,-${height} ${width-29},-${height} ${width},0 z` // close path
-    };
-  }
+		    return {
+		    	width: 0,
+		    	height: 20,
+		    	path: `c 25,-${height} ${width-29},-${height} ${width},0 z`
+		    };
+		 }
 	}
 	class S2Renderer extends Blockly.zelos.Renderer {
 		constructor() {
@@ -126,7 +113,7 @@ function createCodePage() {
 	        super.position(); 
 
 	        const flyoutWidth = document.querySelector("div.blocklyToolbox").offsetWidth;
-	        const flyoutHeight = document.querySelector("div.scripts_c").offsetHeight - 151;
+	        const flyoutHeight = document.querySelector("div.scripts_c").offsetHeight - document.querySelector("div.blocklyToolbox").offsetHeight;
 
 	        let x = 0;
 	        let y = document.querySelector("div.scripts_c").offsetHeight - flyoutHeight;
@@ -162,8 +149,8 @@ function createCodePage() {
 			"operators_category": {
 				"colour": "#5cb712"
 			},
-			"motion_category": {
-				"colour": "#4a6cd4"
+			"data_category": {
+				"colour": "#ee7d16"
 			},
 			"motion_category": {
 				"colour": "#4a6cd4"
@@ -194,18 +181,18 @@ function createCodePage() {
 			'operators_blocks': {
 				'colourPrimary': "#5cb712"
 			},
-			'motion_blocks': {
-				'colourPrimary': "#4a6cd4"
+			'data_blocks': {
+				'colourPrimary': "#ee7d16"
 			},
 			'motion_blocks': {
 				'colourPrimary': "#4a6cd4"
 			}
 		},
 		'componentStyles': {
-			'workspaceBackgroundColour': '#DDDEDE',
-			'toolboxBackgroundColour': '#E6E8E8',
-			'flyoutBackgroundColour': '#E6E8E8',
-			'flyoutForegroundColour': '#FFFFFF',
+			'workspaceBackgroundColour': 'var(--editor)',
+			'toolboxBackgroundColour': 'var(--tab)',
+			'flyoutBackgroundColour': 'var(--tab)',
+			'flyoutForegroundColour': 'var(--textcolor)',
 			'flyoutOpacity': 0,
 		}
 	});
@@ -213,16 +200,19 @@ function createCodePage() {
 		"kind": "categoryToolbox",
 		"contents": [
 			motion_blocks,
+			motion_blocks_stage,
 			events_blocks,
 			looks_blocks,
+			looks_blocks_stage,
 			control_blocks,
 			sound_blocks,
 			sensing_blocks,
 			pen_blocks,
-			operators_blocks
+			operators_blocks,
+			data_blocks
 		]
 	};
-	    Blockly.fieldRegistry.register('field_colour_hsv_sliders', FieldColourHsvSliders);
+	Blockly.fieldRegistry.register('field_colour_hsv_sliders', FieldColourHsvSliders);
 	Blockly.registry.register(Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX, 'S2Flyout', S2Flyout);
 	Blockly.blockRendering.register('scratch2_renderer', S2Renderer);
 	workspace = Blockly.inject(
@@ -234,7 +224,7 @@ function createCodePage() {
 				wheel: true,
 				startScale: 0.5,
 				maxScale: 1,
-				minScale: 0.5,
+				minScale: 0.1,
 				scaleSpeed: 1.2,
 				pinch: true
 			},
@@ -245,9 +235,11 @@ function createCodePage() {
 				flyoutsVerticalToolbox: 'S2Flyout'
 			}
 		});
+	workspace.registerToolboxCategoryCallback('DATA_DYNAMIC', dataCategoryDynamic);
 	const wtoolbox = workspace.getToolbox();
 	workspace.getToolbox().getFlyout().autoClose = false;
 	workspace.getToolbox().getFlyout().autoHide(false);
-	wtoolbox.setSelectedItem(wtoolbox.getToolboxItems()[0]);
+	workspace.registerButtonCallback('newVar', createVarDialog);
+	wtoolbox.setSelectedItem(wtoolbox.getToolboxItems()[1]);
 	defineFilter(workspace)
 }

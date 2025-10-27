@@ -14,34 +14,37 @@
 	--editor: #DDDEDE;
 }
 
-html,
-body,
-div#app {
-	width: 100%;
-	height: 100%;
-	margin: 0px;
-	color: var(--textcolor);
-	overflow: hidden;
-}
-
+/* global */
 * {
 	font-family: "Arial", "Verdana", "DejaVu Sans";
 }
 
-div#app>div.topbar {
-	background-color: var(--top-bar);
+html,
+body,
+div#app {
+	color: var(--textcolor);
+	height: 100%;
+	margin: 0;
+	overflow: hidden;
 	width: 100%;
-	height: 28px;
-	display: flex;
-	align-items: center;
 }
 
+/* top bar */
+div#app > div.topbar {
+	align-items: center;
+	background-color: var(--top-bar);
+	display: flex;
+	height: 28px;
+	width: 100%;
+}
+
+/* Menu Buttons (type="menu") */
 button[type="menu"] {
 	background: none;
 	border: none;
 	color: #fff;
-	margin: 0 8px 0 10px;
 	font-size: 12px;
+	margin: 0 8px 0 10px;
 }
 
 button[type="menu"]:hover {
@@ -53,13 +56,13 @@ button[type="menu"]:focus {
 }
 
 button[type="menu"]::after {
-	content: " ";
+	border-color: #fff transparent transparent transparent;
 	border-style: solid;
 	border-width: 7px 4px 0 4px;
-	border-color: #FFF transparent transparent transparent;
-	position: absolute;
+	content: " ";
 	margin-left: 4px;
 	margin-top: 4px;
+	position: absolute;
 }
 
 button[type="menu"]:hover::after {
@@ -67,47 +70,54 @@ button[type="menu"]:hover::after {
 }
 
 button[type="menu"]:focus::after {
-	border-color: #FFF transparent transparent transparent;
+	border-color: #fff transparent transparent transparent;
+}
+
+/* button submenus */
+ul {
+	/* #min-width: 170px; */
+	background: var(--top-bar);
+	box-shadow: 3px 3px 3px 0px #000000b6;
+	color: #fff;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	font-size: 12px;
+}
+
+ul li {
+	padding: 7px 8px 7px 24px;
+	text-align: left;
+}
+
+ul li:hover {
+	background: var(--itemselected);
+	color: var(--buttonlabel);
 }
 
 button ul {
-	background: var(--top-bar);
-	color: #fff;
-	list-style-type: none;
 	display: none;
-	position: absolute;
-	margin: 0;
-	box-shadow: 3px 3px 3px 0px #000000b6;
-	padding: 0;
-	#min-width: 170px;
 }
 
 button:focus ul {
 	display: block;
 }
 
-button ul li {
-	padding: 7px 8px 7px 24px;
-	text-align: left;
-}
-
-button ul li:hover {
-	background: var(--itemselected);
-	color: var(--buttonlabel);
-}
-
+/* menubtn buttons */
 button[type="menubtn"] {
 	background: none;
 	border: none;
 	color: #fff;
-	margin: 0 4px 0 8px;
 	font-size: 12px;
+	margin: 0 4px 0 8px;
 }
 
 button[type="menubtn"]:hover {
 	color: var(--buttonlabel-over);
 }
 
+/* menu icon buttons */
 button[type="menuicon"] {
 	background: none;
 	border: none;
@@ -127,71 +137,71 @@ button[type="menuicon"] ul {
 	margin-top: 8px;
 }
 
+/* toolbar tools */
 div#tbtool button {
 	margin: 0 1px 1px 1px;
 }
 
-
+/* layout splitter */
+div.splitter {
+	align-items: stretch;
+	display: flex;
+	height: calc(100% - 28px);
+}
 
 div.splitter div.left {
 	display: grid;
+	grid-column-gap: 0;
+	grid-row-gap: 16px;
 	grid-template-columns: 1fr;
 	grid-template-rows: auto 1fr;
-	grid-column-gap: 0px;
-	grid-row-gap: 0px;
-}
-
-div.splitter {
-	height: calc(100% - 28px);
-	display: flex;
-	align-items: stretch;
 }
 
 div.splitter div.right {
-	flex-grow: 1;
-	margin: 5px 5px 5px 0px;
 	display: grid;
+	flex-grow: 1;
+	grid-column-gap: 0;
+	grid-row-gap: 0;
 	grid-template-columns: 1fr;
 	grid-template-rows: 28px 1fr;
-	grid-column-gap: 0px;
-	grid-row-gap: 0px;
+	margin: 5px 5px 5px 0;
 }
 
 div#app div.leftside {
 	display: grid;
+	grid-column-gap: 0;
+	grid-row-gap: 0;
 	grid-template-columns: 1fr;
 	grid-template-rows: auto 1fr;
-	grid-column-gap: 0px;
-	grid-row-gap: 0px;
 }
 
-div.player div.controls {
-	background: var(--titlebar);
-	border-top-left-radius: 6px;
-	border-top-right-radius: 6px;
-	border-bottom: 1px solid var(--border);
-	display: flex;
-	align-items: center;
-	padding: 10px 0 10px 5px;
+/* player/stage */
+div.player {
+	border: 1px solid var(--border);
+	border-top-left-radius: 7px;
+	border-top-right-radius: 7px;
+	display: grid;
+	grid-column-gap: 0;
+	grid-row-gap: 0;
+	grid-template-columns: 1fr;
+	grid-template-rows: 39px 1fr;
+	margin: 5px 5px 0 5px;
+	width: 480px;
 }
 
-div.player div.main {
-	background: #fff;
+div.player canvas.main {
 	height: 360px;
 	width: 100%;
 }
 
-div.player {
-	width: 480px;
-	display: grid;
-	grid-template-columns: 1fr;
-	grid-template-rows: 39px 1fr;
-	grid-column-gap: 0px;
-	grid-row-gap: 0px;
-	border-top-left-radius: 7px;
-	border-top-right-radius: 7px;
-	border: 1px solid var(--border);
-	margin: 5px;
+div.player div.controls {
+	align-items: center;
+	background: var(--titlebar);
+	border-bottom: 1px solid var(--border);
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	display: flex;
+	padding: 10px 0 10px 5px;
 }
 
 div.player div.controls input {
@@ -211,33 +221,41 @@ div.player div.controls button#stop.active {
 	background-image: url(images/546_assets.Resources_stopOn.png);
 }
 
+/* library panel */
 div.splitter div.left div.library {
-	display: grid;
 	align-items: stretch;
-	grid-template-columns: 80px 1fr;
-	margin: 4px;
+	background: var(--tab);
+	border: 1px solid var(--border);
 	border-top-left-radius: 6px;
 	border-top-right-radius: 6px;
-	border: 1px solid var(--border);
-	background: var(--tab);
+	display: grid;
+	grid-template-columns: 75px 1fr;
+	margin: 0 5px 5px 5px;
+	overflow: hidden;
 }
 
 div.library div.stage div.topbar {
 	background: var(--titlebar);
-	border-top-left-radius: 6px;
 	border-bottom: 1px solid var(--border);
 	border-right: 1px solid var(--border);
+	border-top-left-radius: 6px;
 	height: 28px;
 }
 
+div.library div.sprites {
+	overflow: auto;
+}
+
 div.library div.sprites div.topbar {
-	background: var(--titlebar);
-	border-top-right-radius: 6px;
-	border-bottom: 1px solid var(--border);
-	display: flex;
 	align-items: center;
-	padding: 10px;
+	background: var(--titlebar);
+	border-bottom: 1px solid var(--border);
+	border-top-right-radius: 6px;
+	display: flex;
 	height: 8px;
+	padding: 10px;
+	position: fixed;
+	width: 385px;
 }
 
 div.library div.sprites div.topbar span:first-child {
@@ -252,19 +270,100 @@ div.library div.sprites div.topbar button:last-child {
 	margin-left: 6px;
 }
 
+div.library div.sprites div.list {
+	display: grid;
+	grid-column-gap: 4px;
+	grid-row-gap: 4px;
+	grid-auto-rows: 75px;
+	grid-template-columns: repeat(5, 75px);
+	overflow-y: auto;
+	padding: 3px;
+	margin-top: 29px;
+}
+
+div.library div.item {
+	align-items: center;
+	background: #fff;
+	border-radius: 6px;
+	display: flex;
+	flex-direction: column;
+	height: 75px;
+	justify-content: flex-end;
+	width: 75px;
+}
+
+div.library div.stage div.item {
+	background: none;
+	height: 85px;
+}
+
+div.library div.item.selected {
+	background: var(--itemselected) !important;
+	outline: 3px solid var(--over);
+}
+
+div.library div.stage div.item.selected {
+	width: 69px;
+	margin-left: 3px;
+	height: 80px;
+	margin-top: 5px;
+}
+
+div.library div.item img {
+	height: 51px;
+	margin-bottom: 4px;
+	width: 68px;
+}
+
+div.library div.stage div.item img {
+	outline: 1px solid var(--border);
+}
+
+div.library div.item span {
+	font-size: 12px;
+}
+
+div.library div.item span:last-child {
+	font-size: 9px;
+}
+
+div.library div.item button#infobtn {
+	position: absolute;
+	margin-bottom: 60px;
+	margin-right: 64px;
+	display: none;
+}
+
+div.library div.item.selected button#infobtn {
+	display: block;
+}
+
+/* tabs and content */
+div.tabs {
+	display: flex;
+}
+
 div.tabs button {
+	align-items: center;
 	background: var(--panel);
 	border: 1px solid var(--border);
+	border-bottom: none;
 	border-top-left-radius: 6px;
 	border-top-right-radius: 6px;
-	border-bottom: none;
-	display: flex;
-	align-items: center;
-	padding: 7px 11px 10px 11px;
 	color: var(--off);
+	display: flex;
+	height: 29px;
+	padding: 7px 11px 10px 11px;
 	position: relative;
 	z-index: 1;
-	height: 29px;
+}
+
+div.tabs button.active,
+div.tabs button:hover {
+	background: var(--titlebar);
+	border-bottom: 1px solid var(--tab);
+	color: var(--textcolor);
+	z-index: 6;
 }
 
 div.content {
@@ -274,44 +373,84 @@ div.content {
 	z-index: 3;
 }
 
-div.content>div {
+div.content > div {
 	display: none;
-	width: 100%;
 	height: 100%;
+	width: 100%;
 }
 
-div.content>div.active {
+div.content > div.active {
 	display: block;
 }
 
-div.tabs {
-	display: flex;
-}
-
-div.tabs button.active,
-div.tabs button:hover {
-	background: var(--titlebar);
-	color: var(--textcolor);
-	border-bottom: 1px solid var(--tab);
-	z-index: 6;
-}
-
-
+/* inputs and buttons */
 input[type="text"] {
-	box-shadow: inset 1px 1px 1px 0px #0005;
 	border: 1px solid #aaa;
 	border-radius: 3px;
+	box-shadow: inset 1px 1px 1px 0px #0005;
 	height: 20px;
 }
 
+button[type="button"] {
+	background: var(--titlebar);
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	color: var(--buttonlabel);
+	min-width: 56px;
+	padding: 5px;
+}
+
+button[type="button"]:hover {
+	background: var(--over);
+	color: #fff;
+}
+
+/* blockly flyout */
+
 .blocklyToolbox {
-	height: fit-content !important;	
+    height: fit-content !important;
 }
 
 .blocklyFlyout {
-	display: block !important;
 	background: #E6E8E8;
+	display: block !important;
 }
+
+.blocklyToolboxCategoryGroup {
+	border-bottom: 2px solid var(--border);
+	display: grid;
+	grid-auto-rows: 1fr;
+	grid-column-gap: 2px;
+	grid-row-gap: 2px;
+	grid-template-columns: repeat(2, 98px);
+	padding: 3px 7px 7px 9px;
+}
+
+.blocklyToolboxCategoryContainer {
+	height: 20px;
+	width: 91px;
+}
+
+.blocklyToolboxCategoryContainer:hover {
+	background: none;
+	color: var(--buttonlabel-over);
+}
+
+.blocklyToolboxCategoryIcon {
+	display: none !important;
+}
+
+.blocklyToolboxCategoryLabel {
+	font-size: 12px;
+}
+
+.blocklyToolboxCategory {
+	line-height: 17px !important;
+	border-left-width: 7px !important;
+	height: 20px;
+}
+
+/* block theming */
 
 .blocklyBlock .blocklyPath {
 	filter: url(#bevelFilter);
@@ -321,46 +460,100 @@ input[type="text"] {
 .math_number .blocklyPath {
 	filter: url(#inputBevelFilter);
 }
+
 .undefined-renderer.scratch2theme-theme .blocklyText {
-	font-size: 14pt !important;
-	font-family: Lucida Grande, Verdana, Arial, DejaVu Sans, sans-serif;
-	font-weight: 700;
 	fill: #fff;
+	font-family: Lucida Grande, Verdana, Arial, DejaVu Sans, sans-serif;
+	font-size: 14pt !important;
+	font-weight: 700;
 	word-spacing: 1px;
 }
-.undefined-renderer.scratch2theme-theme .blocklyEditableField>text {
-	font-weight: 400;
-	font-size: 9px;
-	word-spacing: 0;
-}
-.blocklyToolboxCategoryGroup { /* i love commiting war crimes */
-	display: grid;
-	grid-template-columns: repeat(2, 98px);
-	grid-template-rows: repeat(5, 1fr);
-	grid-column-gap: 2px;
-	grid-row-gap: 2px;
-	padding: 5px;
-	border-bottom: 2px solid var(--border);
+
+.undefined-renderer.scratch2theme-theme .blocklyEditableField > text {
+	font-weight: normal !important;
 }
 
-.blocklyToolboxCategoryContainer:hover {
-	color: var(--buttonlabel-over);
-	background: none;
+.undefined-renderer.scratch2theme-theme .blocklyFlyoutLabelText {
+	font-size: 26px !important;
+	font-weight: normal !important;
+	font-family: inherit !important;
+	transform: translateX(10px);
 }
 
-.blocklyToolboxCategoryIcon{
-	display: none !important;
-}
-
-.blocklyToolboxCategoryLabel {
-	font-size: 12px;
-}
-
-.blocklyFieldRect.blocklyDropdownRect {
-  fill: #0002;
-  filter: url(#inputBevelFilter);
+.undefined-renderer.scratch2theme-theme .blocklyFieldRect.blocklyDropdownRect {
+	fill: #0002;
+	filter: url(#inputBevelFilter);
 }
 
 .blocklyField.blocklyDropdownField.blocklyEditableField image {
 	filter: brightness(0);
+}
+
+/* dialog */
+div#app div.dialog {
+	background: #fff;
+	border: 1px solid var(--border);
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	box-shadow: 4px 4px 4px #000a;
+	font-size: 15px;
+	left: 50%;
+	min-height: 130px;
+	min-width: 300px;
+	position: absolute;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 9999;
+	width: max-content;
+	height: max-content;
+	padding: 0 5px;
+}
+
+div#app div.dialog > span {
+	align-items: center;
+	background: var(--titlebar);
+	border-bottom: 1px solid var(--border);
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	display: flex;
+	height: 28px;
+	justify-content: center;
+	text-align: center;
+	width: calc(100% + 10px);
+	position: relative;
+	right: 5px;
+}
+
+div#app div.dialog > div {
+	margin: 20px auto 60px auto;
+	text-align: center;
+	width: 100%;
+}
+
+div#app div.dialog footer {
+	bottom: 15px;
+	display: flex;
+	justify-content: center;
+	position: absolute;
+	width: 100%;
+}
+
+div.dialog footer button {
+	min-width: 56px;
+	margin: auto 5px;
+}
+
+div.dialog input[type="text"] {
+	box-shadow: none;
+	border-radius: 0px;
+}
+
+div.dialog label {
+	margin-top: 4px;
+	margin-right: 7px;
+	margin-left: 3px;
+}
+
+div.dialog br#spacer {
+	margin-bottom: 20px;
 }

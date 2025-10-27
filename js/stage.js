@@ -13,8 +13,10 @@ function createPlayer(){
 	controls.appendChild(greenf);
 	controls.appendChild(stop);
 	player.appendChild(controls);
-	const main = document.createElement("div");
+	const main = document.createElement("canvas");
 	main.classList.add("main");
+	main.width = 480;
+	main.height = 360;
 	player.appendChild(main);
 	document.querySelector(".splitter .left").appendChild(player);
 }
@@ -30,6 +32,8 @@ function createLibrary() {
 	sprites.classList.add("sprites");
 	const sptp = document.createElement("div");
 	sptp.classList.add("topbar");
+	const spls = document.createElement("div");
+	spls.classList.add("list");
 	const spritel = createIconBtn("spritelist","images/701_assets.Resources_libraryOff.png","images/580_assets.Resources_libraryOn.png", 19, 19);
 	const nsprite = createIconBtn("newsprite","images/591_assets.Resources_paintbrushOff.png","images/529_assets.Resources_paintbrushOn.png", 19, 19);
 	const usprite = createIconBtn("uploadsprite","images/687_assets.Resources_importOff.png","images/611_assets.Resources_importOn.png", 19, 19);
@@ -45,6 +49,7 @@ function createLibrary() {
 	sptp.appendChild(usprite);
 	sptp.appendChild(csprite);
 	sprites.appendChild(sptp);
+	sprites.appendChild(spls);
 	library.appendChild(stage);
 	library.appendChild(sprites);
 	document.querySelector(".splitter .left").appendChild(library);

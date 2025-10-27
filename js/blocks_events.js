@@ -9,8 +9,8 @@ Blockly.common.defineBlocksWithJsonArray([
       {
         "type": "field_image",
         "src": "images/563_assets.Resources_greenflagOff.png",
-        "width": 37,
-        "height": 37,
+        "width": 42,
+        "height": 42,
         "alt": "green flag",
         "flipRtl": false
       }
@@ -127,9 +127,13 @@ Blockly.common.defineBlocksWithJsonArray([
     "args0": [{
       "type": "field_dropdown",
       "name": "VALUE1",
-      "options": [
-        ["message1", "ITEM1"]
-      ]
+      "options": function(){
+        options = [];
+        ScratchRuntime.Project.messages.forEach(function(item){
+          options.push([item, item]);
+        });
+        return options;
+      }
     }]
   }, {
     "type": "broadcast",
@@ -140,9 +144,13 @@ Blockly.common.defineBlocksWithJsonArray([
     "args0": [{
       "type": "field_dropdown",
       "name": "VALUE1",
-      "options": [
-        ["message1", "ITEM1"]
-      ]
+      "options": function(){
+        options = [];
+        ScratchRuntime.Project.messages.forEach(function(item){
+          options.push([item, item]);
+        });
+        return options;
+      }
     }],
     "style": "events_blocks"
   }, {
@@ -154,9 +162,13 @@ Blockly.common.defineBlocksWithJsonArray([
     "args0": [{
       "type": "field_dropdown",
       "name": "VALUE1",
-      "options": [
-        ["message1", "ITEM1"]
-      ]
+      "options": function(){
+        options = [];
+        ScratchRuntime.Project.messages.forEach(function(item){
+          options.push([item, item]);
+        });
+        return options;
+      }
     }],
     "style": "events_blocks"
   }
@@ -217,9 +229,40 @@ const events_blocks = {
             "type": "doBroadcastAndWait"
         }
       ]
-    }
+    };
 
 javascript.javascriptGenerator.forBlock['whenGreenFlag'] = function (block, generator) {
   const nextBlock = block.getNextBlock();
-  return `events.greenflag(function(){\n${generator.blockToCode(nextBlock)}});\n`
+  return `events.whenGreenFlag(function(){\n${generator.blockToCode(nextBlock)}});\n`
+}
+javascript.javascriptGenerator.forBlock['whenKeyPressed'] = function (block, generator) {
+  const nextBlock = block.getNextBlock();
+  return `events.whenKeyPressed(function(){\n${generator.blockToCode(nextBlock)}});\n`
+}
+javascript.javascriptGenerator.forBlock['whenThisClicked'] = function (block, generator) {
+  const nextBlock = block.getNextBlock();
+  return `events.whenThisClicked(function(){\n${generator.blockToCode(nextBlock)}});\n`
+}
+javascript.javascriptGenerator.forBlock['whenSceneStarts'] = function (block, generator) {
+  const nextBlock = block.getNextBlock();
+  return `events.whenGreenFlag(function(){\n${generator.blockToCode(nextBlock)}});\n`
+}
+javascript.javascriptGenerator.forBlock['whenSensorGreaterThan'] = function (block, generator) {
+  const nextBlock = block.getNextBlock();
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  const value2 = Blockly.JavaScript.valueToCode(block, 'VALUE2', order);
+  return `events.whenSensorGreaterThan(${value1}, ${value2}, function(){\n${generator.blockToCode(nextBlock)}});\n`
+}
+javascript.javascriptGenerator.forBlock['whenIReceive'] = function (block, generator) {
+  const nextBlock = block.getNextBlock();
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `events.whenIReceive("${value}",function(){\n${generator.blockToCode(nextBlock)}});\n`
+}
+javascript.javascriptGenerator.forBlock['broadcast'] = function (block, generator) {
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `events.broadcast(${value1});\n`
+}
+javascript.javascriptGenerator.forBlock['doBroadcastAndWait'] = function (block, generator) {
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `events.broadcastWait(${value1});\n`
 }

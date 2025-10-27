@@ -1,4 +1,4 @@
-Blockly.common.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
+Blockly.common.defineBlocksWithJsonArray([
   {
     "type": "say:duration:elapsed:from:",
     "style": "looks_blocks",
@@ -72,15 +72,28 @@ Blockly.common.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
     "args0": [{
       "type": "field_dropdown",
       "name": "FIELDNAME",
-      "options": [
-        [ "costume1", "ITEM1" ]
-      ]
+      "options": function(){
+        const options = [];
+        ScratchRuntime.Project.sprites[document.querySelector("div.item.selected").id].costumes.forEach(function(item){
+          options.push([item.name, item.name]);
+        });
+        options.push(["next backdrop", "_next_"]);
+        options.push(["previous backdrop", "_prev_"]);
+        return options;
+      }
     }]
   },
   {
     "type": "nextCostume",
     "style": "looks_blocks",
     "message0": "next costume",
+    "nextStatement": null,
+    "previousStatement": null
+  },
+  {
+    "type": "nextScene",
+    "style": "looks_blocks",
+    "message0": "next backdrop",
     "nextStatement": null,
     "previousStatement": null
   },
@@ -93,10 +106,35 @@ Blockly.common.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
     "args0": [{
       "type": "field_dropdown",
       "name": "VALUE1",
-      "options": [
-        [ "next backdro‍p", "_next_" ],
-        [ "previous backdrop", "_prev_" ]
-      ]
+      "options": function(){
+        const options = [];
+        ScratchRuntime.Project.sprites["_stage_"].costumes.forEach(function(item){
+          options.push([item.name, item.name]);
+        });
+        options.push(["next backdrop", "_next_"]);
+        options.push(["previous backdrop", "_prev_"]);
+        return options;
+      }
+    }]
+  },
+  {
+    "type": "startSceneAndWait",
+    "style": "looks_blocks",
+    "message0": "switch backdrop to %1 and wait",
+    "nextStatement": null,
+    "previousStatement": null,
+    "args0": [{
+      "type": "field_dropdown",
+      "name": "VALUE1",
+      "options": function(){
+        const options = [];
+        ScratchRuntime.Project.sprites["_stage_"].costumes.forEach(function(item){
+          options.push([item.name, item.name]);
+        });
+        options.push(["next backdrop", "_next_"]);
+        options.push(["previous backdrop", "_prev_"]);
+        return options;
+      }
     }]
   },
   {
@@ -201,6 +239,12 @@ Blockly.common.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
     "output": "value"
   },
   {
+    "type": "sceneIndex",
+    "style": "looks_blocks",
+    "message0": "backdrop #",
+    "output": "value"
+  },
+  {
     "type": "sceneName",
     "style": "looks_blocks",
     "message0": "backdrop name",
@@ -219,6 +263,8 @@ const looks_blocks = {
       "kind": "category",
       "name": "Looks",
       "categorystyle": "looks_category",
+      "toolboxitemid": "looks_stage0",
+      "hidden": "true",
       "contents": [{
           "kind": "block",
           "type": "say:duration:elapsed:from:",
@@ -401,4 +447,145 @@ const looks_blocks = {
           "kind": "block",
           "type": "scale"
         }]
-    }
+    };
+const looks_blocks_stage = {
+      "kind": "category",
+      "name": "Looks",
+      "categorystyle": "looks_category",
+      "toolboxitemid": "looks_stage1",
+      "contents": [{
+          "kind": "block",
+          "type": "startScene",
+          "gap": 16
+        },{
+          "kind": "block",
+          "type": "startSceneAndWait",
+          "gap": 16
+        },{
+          "kind": "block",
+          "type": "nextScene",
+          "gap": 32
+        },{
+          "kind": "block",
+          "type": "changeGraphicEffect:by:",
+          "gap": 16,
+          "inputs": {
+            "VALUE2": {
+              "shadow": {
+                "type": "math_number",
+                "fields": {
+                  "NUM": 25
+                }
+              }
+            }
+          }
+        },{
+          "kind": "block",
+          "type": "setGraphicEffect:to:",
+          "gap": 16,
+          "inputs": {
+            "VALUE2": {
+              "shadow": {
+                "type": "math_number",
+                "fields": {
+                  "NUM": 0
+                }
+              }
+            }
+          }
+        },{
+          "kind": "block",
+          "type": "filterReset",
+          "gap": 32
+        },{
+          "kind": "block",
+          "type": "sceneName",
+          "gap": 16
+        },{
+          "kind": "block",
+          "type": "sceneIndex"
+        }
+      ]
+    };
+
+javascript.javascriptGenerator.forBlock['say:duration:elapsed:from:'] = function (block, generator) {
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  const value2 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `looks.sayFor(${value1}, ${value2});\n`
+}
+javascript.javascriptGenerator.forBlock['say:'] = function (block, generator) {
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `looks.say(${value1});\n`
+}
+javascript.javascriptGenerator.forBlock['think:duration:elapsed:from:'] = function (block, generator) {
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  const value2 = Blockly.JavaScript.valueToCode(block, 'VALUE2', order);
+  return `looks.thinkFor(${value1}, ${value2});\n`
+}
+javascript.javascriptGenerator.forBlock['think:'] = function (block, generator) {
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `looks.think(${value1});\n`
+}
+javascript.javascriptGenerator.forBlock['show'] = function (block, generator) {
+  return `looks.show();\n`
+}
+javascript.javascriptGenerator.forBlock['hide'] = function (block, generator) {
+  return `looks.hide();\n`
+}
+javascript.javascriptGenerator.forBlock['lookLike'] = function (block, generator) {
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `looks.lookLike(${value1});\n`
+}
+javascript.javascriptGenerator.forBlock['nextCostume'] = function (block, generator) {
+  return `looks.nextCostume();\n`
+}
+javascript.javascriptGenerator.forBlock['nextScene'] = function (block, generator) {
+  return `looks.nextScene();\n`
+}
+javascript.javascriptGenerator.forBlock['startScene'] = function (block, generator) {
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `looks.startScene(${value1});\n`
+}
+javascript.javascriptGenerator.forBlock['startSceneAndWait'] = function (block, generator) {
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `looks.startSceneAndWait(${value1});\n`
+}
+javascript.javascriptGenerator.forBlock['changeGraphicEffect:by:'] = function (block, generator) {
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `looks.changeGraphicEffect(${value1});\n`
+}
+javascript.javascriptGenerator.forBlock['setGraphicEffect:by:'] = function (block, generator) {
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `looks.setGraphicEffect(${value1});\n`
+}
+javascript.javascriptGenerator.forBlock['filterReset'] = function (block, generator) {
+  return `looks.filterReset();\n`
+}
+javascript.javascriptGenerator.forBlock['changeSizeBy:'] = function (block, generator) {
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `looks.changeSize(${value1});\n`
+}
+javascript.javascriptGenerator.forBlock['setSizeTo:'] = function (block, generator) {
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `looks.setSize(${value1});\n`
+}
+javascript.javascriptGenerator.forBlock['comeToFront'] = function (block, generator) {
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `looks.comeToFront();\n`
+}
+javascript.javascriptGenerator.forBlock['goBackByLayers:'] = function (block, generator) {
+  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
+  return `looks.goBackByLayers(${value1});\n`
+}
+javascript.javascriptGenerator.forBlock['costumeIndex'] = function (block, generator) {
+  return `looks.costumeIndex`
+}
+javascript.javascriptGenerator.forBlock['sceneIndex'] = function (block, generator) {
+  return `looks.sceneIndex`
+}
+javascript.javascriptGenerator.forBlock['sceneName'] = function (block, generator) {
+  return `looks.sceneName`
+}
+javascript.javascriptGenerator.forBlock['scale'] = function (block, generator) {
+  return `looks.scale`
+}
