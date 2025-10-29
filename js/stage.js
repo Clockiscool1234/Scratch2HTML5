@@ -1,9 +1,16 @@
 function createPlayer(){
+	const bg = document.createElement("div");
+	bg.classList.add("bg")
 	const player = document.createElement("div");
 	player.classList.add("player")
 	const controls = document.createElement("div");
 	controls.classList.add("controls");
 	const fullscreen = createIconBtn("fullscreen","images/589_assets.Resources_fullscreenOff.png","images/589_assets.Resources_fullscreenOff.png",25,20);
+	fullscreen.addEventListener("click", function(){
+		Array.from(document.querySelector("div.player").classList).includes("fullscreen") ? 
+		document.querySelector("div.player").classList.remove("fullscreen") : 
+		document.querySelector("div.player").classList.add("fullscreen")
+	});
 	const title = document.createElement("input");
 	title.type = "text"
 	const greenf = createIconBtn("greenf","images/563_assets.Resources_greenflagOff.png","images/633_assets.Resources_greenflagOn.png",21,21);
@@ -19,6 +26,7 @@ function createPlayer(){
 	main.height = 360;
 	player.appendChild(main);
 	document.querySelector(".splitter .left").appendChild(player);
+	document.querySelector(".splitter .left").appendChild(bg);
 }
 function createLibrary() {
 	const library = document.createElement("div");

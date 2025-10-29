@@ -60,6 +60,7 @@ createPlayer();
 createLibrary();
 createTabs();
 
+
 var ScratchRuntime = new S2Runtime(document.querySelector("canvas.main"))
 createCodePage();
 
@@ -67,7 +68,7 @@ document.querySelector("button#spritelist").addEventListener("click", unimplemen
 document.querySelector("button#uploadsprite").addEventListener("click", unimplementedDialog);
 document.querySelector("button#camerasprite").addEventListener("click", unimplementedDialog);
 document.querySelector("button#newsprite").addEventListener("click", function(){
-    const matchingStrings = Object.keys(ScratchRuntime.Project.sprites).filter(str => str.startsWith("Sprite"));
+    const matchingStrings = ScratchRuntime.getAllSprites().filter(obj => obj.objName.startsWith("Sprite"));
     if (matchingStrings.length === 0) {
         ScratchRuntime.newSprite("Sprite1");
     } else {

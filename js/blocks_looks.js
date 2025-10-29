@@ -1,4 +1,4 @@
-Blockly.common.defineBlocksWithJsonArray([
+const looks_def_blocks = [
   {
     "type": "say:duration:elapsed:from:",
     "style": "looks_blocks",
@@ -64,21 +64,19 @@ Blockly.common.defineBlocksWithJsonArray([
     "previousStatement": null
   },
   {
-    "type": "lookLike",
+    "type": "lookLike:",
     "style": "looks_blocks",
     "message0": "switch costume to %1",
     "nextStatement": null,
     "previousStatement": null,
     "args0": [{
       "type": "field_dropdown",
-      "name": "FIELDNAME",
+      "name": "VALUE1",
       "options": function(){
-        const options = [];
-        ScratchRuntime.Project.sprites[document.querySelector("div.item.selected").id].costumes.forEach(function(item){
+        options = [];
+        ScratchRuntime.Project.sprites[document.querySelector("div.item.selected").id].costumes.forEach((item)=>{
           options.push([item.name, item.name]);
         });
-        options.push(["next backdrop", "_next_"]);
-        options.push(["previous backdrop", "_prev_"]);
         return options;
       }
     }]
@@ -107,8 +105,8 @@ Blockly.common.defineBlocksWithJsonArray([
       "type": "field_dropdown",
       "name": "VALUE1",
       "options": function(){
-        const options = [];
-        ScratchRuntime.Project.sprites["_stage_"].costumes.forEach(function(item){
+        options = [];
+        ScratchRuntime.Project.sprites["_stage_"].costumes.forEach((item)=>{
           options.push([item.name, item.name]);
         });
         options.push(["next backdrop", "_next_"]);
@@ -127,8 +125,8 @@ Blockly.common.defineBlocksWithJsonArray([
       "type": "field_dropdown",
       "name": "VALUE1",
       "options": function(){
-        const options = [];
-        ScratchRuntime.Project.sprites["_stage_"].costumes.forEach(function(item){
+        options = [];
+        ScratchRuntime.Project.sprites["_stage_"].costumes.forEach((item)=>{
           options.push([item.name, item.name]);
         });
         options.push(["next backdrop", "_next_"]);
@@ -206,7 +204,7 @@ Blockly.common.defineBlocksWithJsonArray([
   {
     "type": "setSizeTo:",
     "style": "looks_blocks",
-    "message0": "set size to %1",
+    "message0": "set size to %1\%",
     "nextStatement": null,
     "previousStatement": null,
     "args0": [{
@@ -256,8 +254,9 @@ Blockly.common.defineBlocksWithJsonArray([
     "message0": "size",
     "output": "value"
   }
-]);
+];
 
+Blockly.common.defineBlocksWithJsonArray(looks_def_blocks);
 
 const looks_blocks = {
       "kind": "category",
@@ -347,7 +346,7 @@ const looks_blocks = {
           "gap": 32
         },{
           "kind": "block",
-          "type": "lookLike",
+          "type": "lookLike:",
           "gap": 16
         },{
           "kind": "block",
@@ -532,9 +531,8 @@ javascript.javascriptGenerator.forBlock['show'] = function (block, generator) {
 javascript.javascriptGenerator.forBlock['hide'] = function (block, generator) {
   return `looks.hide();\n`
 }
-javascript.javascriptGenerator.forBlock['lookLike'] = function (block, generator) {
-  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
-  return `looks.lookLike(${value1});\n`
+javascript.javascriptGenerator.forBlock['lookLike:'] = function (block, generator) {
+  return `looks.lookLike("${block.getFieldValue('VALUE1')}");\n`
 }
 javascript.javascriptGenerator.forBlock['nextCostume'] = function (block, generator) {
   return `looks.nextCostume();\n`
@@ -543,20 +541,16 @@ javascript.javascriptGenerator.forBlock['nextScene'] = function (block, generato
   return `looks.nextScene();\n`
 }
 javascript.javascriptGenerator.forBlock['startScene'] = function (block, generator) {
-  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
-  return `looks.startScene(${value1});\n`
+  return `looks.startScene("${block.getFieldValue('VALUE1')}");\n`
 }
 javascript.javascriptGenerator.forBlock['startSceneAndWait'] = function (block, generator) {
-  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
-  return `looks.startSceneAndWait(${value1});\n`
+  return `looks.startSceneAndWait("${block.getFieldValue('VALUE1')}");\n`
 }
 javascript.javascriptGenerator.forBlock['changeGraphicEffect:by:'] = function (block, generator) {
-  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
-  return `looks.changeGraphicEffect(${value1});\n`
+  return `looks.changeGraphicEffect("${block.getFieldValue('VALUE1')}",${block.getFieldValue('VALUE2')});\n`
 }
-javascript.javascriptGenerator.forBlock['setGraphicEffect:by:'] = function (block, generator) {
-  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
-  return `looks.setGraphicEffect(${value1});\n`
+javascript.javascriptGenerator.forBlock['setGraphicEffect:to:'] = function (block, generator) {
+  return `looks.setGraphicEffect("${block.getFieldValue('VALUE1')}",${block.getFieldValue('VALUE2')});\n`
 }
 javascript.javascriptGenerator.forBlock['filterReset'] = function (block, generator) {
   return `looks.filterReset();\n`
@@ -570,7 +564,6 @@ javascript.javascriptGenerator.forBlock['setSizeTo:'] = function (block, generat
   return `looks.setSize(${value1});\n`
 }
 javascript.javascriptGenerator.forBlock['comeToFront'] = function (block, generator) {
-  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
   return `looks.comeToFront();\n`
 }
 javascript.javascriptGenerator.forBlock['goBackByLayers:'] = function (block, generator) {
@@ -578,14 +571,14 @@ javascript.javascriptGenerator.forBlock['goBackByLayers:'] = function (block, ge
   return `looks.goBackByLayers(${value1});\n`
 }
 javascript.javascriptGenerator.forBlock['costumeIndex'] = function (block, generator) {
-  return `looks.costumeIndex`
+  return [`looks.costumeIndex`, order]
 }
 javascript.javascriptGenerator.forBlock['sceneIndex'] = function (block, generator) {
-  return `looks.sceneIndex`
+  return [`looks.sceneIndex`, order]
 }
 javascript.javascriptGenerator.forBlock['sceneName'] = function (block, generator) {
-  return `looks.sceneName`
+  return [`looks.sceneName`, order]
 }
 javascript.javascriptGenerator.forBlock['scale'] = function (block, generator) {
-  return `looks.scale`
+  return [`looks.scale`, order]
 }

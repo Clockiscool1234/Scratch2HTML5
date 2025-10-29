@@ -7,13 +7,24 @@
 	<link rel="stylesheet" type="text/css" href="app.css">
 </head>
 <body>
+	<noscript>
+		<center>
+            <p>
+            	Oh Noes! Scratch Editor cannot display.
+            	<br>
+            	JavaScript is disabled, missing, or unsupported.
+            </p>
+            <img src="images/noJavaScript.png">
+        </center>
+    </noscript>
 	<div id="app"></div>
+	<script src="https://unpkg.com/jszip@3.10.1/dist/jszip.min.js"></script>
 	<script src="https://unpkg.com/blockly/blockly_compressed.js"></script>
 	<script src="https://unpkg.com/blockly/blocks_compressed.js"></script>
 	<script src="https://unpkg.com/blockly/javascript_compressed.js"></script>
 	<script src="https://unpkg.com/blockly/msg/en.js"></script>
 	<script src="https://unpkg.com/@blockly/field-colour-hsv-sliders"></script>
-	<script src="js/vars.js"></script>
+	<script type="text/javascript" src='js/ZipFile.complete.js'></script>
 	<script src="js/blocks_motion.js"></script>
 	<script src="js/blocks_events.js"></script>
 	<script src="js/blocks_looks.js"></script>
@@ -23,6 +34,7 @@
 	<script src="js/blocks_pen.js"></script>
 	<script src="js/blocks_operators.js"></script>
 	<script src="js/blocks_data.js"></script>
+	<script src="js/vars.js"></script>
 	<script src="js/base.js"></script>
 	<script src="js/widgets.js"></script>
 	<script src="js/topbar.js"></script>

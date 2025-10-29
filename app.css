@@ -1,3 +1,4 @@
+/* global */
 :root {
 	--top-bar: #9C9EA2;
 	--textcolor: #5C5D5F;
@@ -14,9 +15,23 @@
 	--editor: #DDDEDE;
 }
 
-/* global */
 * {
 	font-family: "Arial", "Verdana", "DejaVu Sans";
+	user-select: none;
+}
+
+/* no javascript */
+noscript p {
+	color: #aaa;
+	font-size: 22px;
+	margin-top: 0;
+	line-height: 28px;
+}
+noscript {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
 }
 
 html,
@@ -152,9 +167,9 @@ div.splitter {
 div.splitter div.left {
 	display: grid;
 	grid-column-gap: 0;
-	grid-row-gap: 16px;
+	grid-row-gap: 0;
 	grid-template-columns: 1fr;
-	grid-template-rows: auto 1fr;
+	grid-template-rows: auto 16px 1fr;
 }
 
 div.splitter div.right {
@@ -221,6 +236,40 @@ div.player div.controls button#stop.active {
 	background-image: url(images/546_assets.Resources_stopOn.png);
 }
 
+div.player.fullscreen {
+	position: absolute;
+	aspect-ratio: 160 / 133;
+	width: auto;
+	height: calc(100% - 10px);
+	z-index: 999999999;
+	top: 50%;
+ 	left: 50%;
+	transform: translate(-50%, -50%);
+	margin: 0;
+}
+
+div.player.fullscreen ~ div.bg {
+	background: #fff;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index: 120;
+	top: 0px;
+	left: 0px;
+	aspect-ratio: unset;
+}
+
+div.player.fullscreen div.controls input {
+	position: relative;
+	top: 99999999999999999999px;
+	left: 99999999999999999999px;
+}
+
+div.player.fullscreen div.controls button#fullscreen {
+	background-image: url(images/628_assets.Resources_fullscreenOn.png);
+	width: 26px;
+}
+
 /* library panel */
 div.splitter div.left div.library {
 	align-items: stretch;
@@ -256,6 +305,7 @@ div.library div.sprites div.topbar {
 	padding: 10px;
 	position: fixed;
 	width: 385px;
+	z-index: 99;
 }
 
 div.library div.sprites div.topbar span:first-child {
@@ -327,15 +377,36 @@ div.library div.item span:last-child {
 	font-size: 9px;
 }
 
+div.library div.sprites div.item.selected img {
+	position: relative;
+	top: 18px;
+}
+
 div.library div.item button#infobtn {
-	position: absolute;
-	margin-bottom: 60px;
-	margin-right: 64px;
+	position: relative;
+	/*! margin-bottom: 60px; */
+	/*! margin-right: 64px; */
 	display: none;
+	/*! z-index: 6; */
+	right: 33px;
+	bottom: 61px;
+	padding-top: 18px;
+}
+
+div.library div.sprites div.item.selected span {
+	position: relative;
+	top: 18px;
 }
 
 div.library div.item.selected button#infobtn {
 	display: block;
+}
+
+div.library div.sprites div.info {
+	width: 100%;
+	height: 100%;
+	background: #fff;
+	margin-top: 29px;
 }
 
 /* tabs and content */

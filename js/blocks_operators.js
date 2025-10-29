@@ -1,4 +1,4 @@
-Blockly.common.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
+const operators_def_blocks = [ 
   {
     "type": "+",
     "message0": "%1 + %2",
@@ -232,8 +232,10 @@ Blockly.common.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
     "style": "operators_blocks",
     "output": "value"
   }
+];
 
-]);
+Blockly.common.defineBlocksWithJsonArray(operators_def_blocks);
+
 const operators_blocks = {
       "kind": "category",
       "name": "Operators",

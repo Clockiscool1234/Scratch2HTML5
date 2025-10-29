@@ -1,4 +1,4 @@
-Blockly.common.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
+const data_def_blocks = [
   {
 	"type": "var",
 	"message0": '%1',
@@ -171,7 +171,7 @@ Blockly.common.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
 	  ]
 	}, {
 	  "type": "field_variable",
-	  "name": "FIELDNAME"
+	  "name": "VALUE1"
 	}],
 	"style": "data_list_blocks",
 	"output": "Value"
@@ -180,7 +180,7 @@ Blockly.common.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
 	"message0": "length of %1",
 	"args0": [{
 	  "type": "field_variable",
-	  "name": "FIELDNAME"
+	  "name": "VALUE1"
 	}],
 	"style": "data_list_blocks",
 	"output": "Value"
@@ -189,7 +189,7 @@ Blockly.common.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
 	"message0": "%1 contains %2?",
 	"args0": [{
 	  "type": "field_variable",
-	  "name": "FIELDNAME"
+	  "name": "VALUE1"
 	}, {
       "type": "field_dropdown",
       "name": "VALUE2",
@@ -225,7 +225,9 @@ Blockly.common.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
 	"style": "data_list_blocks"
   }
 
-]);
+];
+
+Blockly.common.defineBlocksWithJsonArray(data_def_blocks);
 
 const data_blocks = {
 	"kind": "category",

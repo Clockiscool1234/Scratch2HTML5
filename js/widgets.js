@@ -114,7 +114,7 @@ function createDialog(id, title, content, buttons=null, html=false, w=null, h=nu
 	}
 	const footer = document.createElement('footer');
 	if(buttons){
-		Object.keys(buttons).forEach(function(item){
+		Object.keys(buttons).forEach((item)=>{
 			button = document.createElement('button');
 			button.type = 'button';
 			button.textContent = buttons[item].text;

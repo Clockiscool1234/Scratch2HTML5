@@ -1,4 +1,4 @@
-Blockly.common.defineBlocksWithJsonArray([
+const control_def_blocks = [
 	{
 		"type": "wait:elapsed:from:",
 		"message0": "wait %1 secs",
@@ -140,7 +140,9 @@ Blockly.common.defineBlocksWithJsonArray([
 		"style": "control_blocks",
 		"previousStatement": null
 	}
-]);
+];
+
+Blockly.common.defineBlocksWithJsonArray(control_def_blocks);
 
 const control_blocks = {
 			"kind": "category",

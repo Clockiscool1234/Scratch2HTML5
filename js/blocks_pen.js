@@ -1,4 +1,4 @@
-Blockly.common.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
+const pen_def_blocks = [
   {
     "type": "clearPenTrails",
     "message0": "clear",
@@ -103,7 +103,9 @@ Blockly.common.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
       "check": null
     }]
   }
-]); 
+];
+
+Blockly.common.defineBlocksWithJsonArray(pen_def_blocks); 
 
 const pen_blocks = {
       "kind": "category",

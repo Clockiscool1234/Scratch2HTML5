@@ -1,4 +1,4 @@
-Blockly.common.defineBlocksWithJsonArray([
+const events_def_blocks = [
   {
     "type": "whenGreenFlag",
     "style": {
@@ -127,13 +127,7 @@ Blockly.common.defineBlocksWithJsonArray([
     "args0": [{
       "type": "field_dropdown",
       "name": "VALUE1",
-      "options": function(){
-        options = [];
-        ScratchRuntime.Project.messages.forEach(function(item){
-          options.push([item, item]);
-        });
-        return options;
-      }
+      "options": [["x","X"]]
     }]
   }, {
     "type": "broadcast",
@@ -144,13 +138,7 @@ Blockly.common.defineBlocksWithJsonArray([
     "args0": [{
       "type": "field_dropdown",
       "name": "VALUE1",
-      "options": function(){
-        options = [];
-        ScratchRuntime.Project.messages.forEach(function(item){
-          options.push([item, item]);
-        });
-        return options;
-      }
+      "options": [["x","X"]]
     }],
     "style": "events_blocks"
   }, {
@@ -162,17 +150,13 @@ Blockly.common.defineBlocksWithJsonArray([
     "args0": [{
       "type": "field_dropdown",
       "name": "VALUE1",
-      "options": function(){
-        options = [];
-        ScratchRuntime.Project.messages.forEach(function(item){
-          options.push([item, item]);
-        });
-        return options;
-      }
+      "options": [["x","X"]]
     }],
     "style": "events_blocks"
   }
-]); 
+];
+
+Blockly.common.defineBlocksWithJsonArray(events_def_blocks); 
 
 const events_blocks = {
       "kind": "category",
@@ -249,9 +233,8 @@ javascript.javascriptGenerator.forBlock['whenSceneStarts'] = function (block, ge
 }
 javascript.javascriptGenerator.forBlock['whenSensorGreaterThan'] = function (block, generator) {
   const nextBlock = block.getNextBlock();
-  const value1 = Blockly.JavaScript.valueToCode(block, 'VALUE1', order);
   const value2 = Blockly.JavaScript.valueToCode(block, 'VALUE2', order);
-  return `events.whenSensorGreaterThan(${value1}, ${value2}, function(){\n${generator.blockToCode(nextBlock)}});\n`
+  return `events.whenSensorGreaterThan("${block.getFieldValue('VALUE1')}", ${value2}, function(){\n${generator.blockToCode(nextBlock)}});\n`
 }
 javascript.javascriptGenerator.forBlock['whenIReceive'] = function (block, generator) {
   const nextBlock = block.getNextBlock();

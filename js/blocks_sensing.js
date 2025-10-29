@@ -1,4 +1,4 @@
-Blockly.defineBlocksWithJsonArray([
+const sensing_def_blocks = [
   {
     "type": "touching:",
     "message0": 'touching %1',
@@ -248,7 +248,9 @@ Blockly.defineBlocksWithJsonArray([
     "style": "sensing_blocks",
     "output": "value"
   }
-]);
+];
+
+Blockly.defineBlocksWithJsonArray(sensing_def_blocks);
 
 const sensing_blocks = {
       "kind": "category",
