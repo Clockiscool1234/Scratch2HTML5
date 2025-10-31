@@ -74,7 +74,7 @@ const events_def_blocks = [
       ]
     }]
   }, {
-    "type": "whenThisClicked",
+    "type": "whenClicked",
     "style": {
         "hat": "cap"
     },
@@ -92,9 +92,13 @@ const events_def_blocks = [
     "args0": [{
       "type": "field_dropdown",
       "name": "VALUE1",
-      "options": [
-        ["backdrop1", "ITEM1"]
-      ]
+      "options": function(){
+        options = [];
+        ScratchRuntime.getSprite("Stage").costumes.forEach((item)=>{
+          options.push([item.costumeName, item.costumeName]);
+        });
+        return options;
+      }
     }]
   }, {
     "type": "whenSensorGreaterThan",
@@ -175,7 +179,7 @@ const events_blocks = {
         },
         {
             "kind": "block",
-            "type": "whenThisClicked",
+            "type": "whenClicked",
             "gap": 16
         },
         {
@@ -223,9 +227,9 @@ javascript.javascriptGenerator.forBlock['whenKeyPressed'] = function (block, gen
   const nextBlock = block.getNextBlock();
   return `events.whenKeyPressed(function(){\n${generator.blockToCode(nextBlock)}});\n`
 }
-javascript.javascriptGenerator.forBlock['whenThisClicked'] = function (block, generator) {
+javascript.javascriptGenerator.forBlock['whenClicked'] = function (block, generator) {
   const nextBlock = block.getNextBlock();
-  return `events.whenThisClicked(function(){\n${generator.blockToCode(nextBlock)}});\n`
+  return `events.whenClicked(function(){\n${generator.blockToCode(nextBlock)}});\n`
 }
 javascript.javascriptGenerator.forBlock['whenSceneStarts'] = function (block, generator) {
   const nextBlock = block.getNextBlock();

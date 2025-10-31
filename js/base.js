@@ -25,7 +25,7 @@ function createTabs(){
 		document.querySelector(".sounds_c").classList.remove("active");
 	});
 	const costumes = document.createElement("button");
-	costumes.innerText = "Costumes";
+	costumes.innerText = "Backdrops";
 	costumes.id = "costumes_t";
 	costumes.addEventListener("click",function(){
 		document.querySelector("#scripts_t").classList.remove("active");

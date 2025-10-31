@@ -36,6 +36,17 @@ function createLibrary() {
 	const sttp = document.createElement("div");
 	sttp.classList.add("topbar");
 	stage.appendChild(sttp);
+	const label1 = document.createElement("span");
+	label1.innerText = "New backdrop:"
+	const bgl = createIconBtn("backdroplist","images/598_assets.Resources_landscapeSmallOff.png", "images/672_assets.Resources_landscapeSmallOn.png", 16, 13);
+	const nbg = createIconBtn("newbackdrop","images/717_assets.Resources_paintbrushSmallOff.png", "images/617_assets.Resources_paintbrushSmallOn.png", 12, 16);
+	const ubg = createIconBtn("uploadbackdrop","images/727_assets.Resources_importSmallOff.png", "images/572_assets.Resources_importSmallOn.png", 16, 16);
+	const cbg = createIconBtn("camerabackdrop","images/497_assets.Resources_cameraSmallOff.png", "images/685_assets.Resources_cameraSmallOn.png", 16, 13);
+	stage.appendChild(label1)
+	stage.appendChild(bgl);
+	stage.appendChild(nbg);
+	stage.appendChild(ubg);
+	stage.appendChild(cbg);
 	const sprites = document.createElement("div");
 	sprites.classList.add("sprites");
 	const sptp = document.createElement("div");
@@ -46,12 +57,12 @@ function createLibrary() {
 	const nsprite = createIconBtn("newsprite","images/591_assets.Resources_paintbrushOff.png","images/529_assets.Resources_paintbrushOn.png", 19, 19);
 	const usprite = createIconBtn("uploadsprite","images/687_assets.Resources_importOff.png","images/611_assets.Resources_importOn.png", 19, 19);
 	const csprite = createIconBtn("camerasprite","images/639_assets.Resources_cameraOff.png","images/531_assets.Resources_cameraOn.png", 19, 19);
-	const label1 = document.createElement("span");
-	label1.innerText = "Sprites"
 	const label2 = document.createElement("span");
-	label2.innerText = "New sprite:"
-	sptp.appendChild(label1);
+	label2.innerText = "Sprites"
+	const label3 = document.createElement("span");
+	label3.innerText = "New sprite:"
 	sptp.appendChild(label2);
+	sptp.appendChild(label3);
 	sptp.appendChild(spritel);
 	sptp.appendChild(nsprite);
 	sptp.appendChild(usprite);

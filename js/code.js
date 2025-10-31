@@ -184,8 +184,8 @@ function createCodePage() {
 			'data_blocks': {
 				'colourPrimary': "#ee7d16"
 			},
-			'motion_blocks': {
-				'colourPrimary': "#4a6cd4"
+			'data_list_blocks': {
+				'colourPrimary': "#cc5b22"
 			}
 		},
 		'componentStyles': {
@@ -220,13 +220,15 @@ function createCodePage() {
 			toolbox: toolbox,
 			renderer: "scratch2_renderer",
 			zoom: {
-				controls: true,
-				wheel: true,
+				controls: false,
+				wheel: false,
 				startScale: 0.5,
 				maxScale: 1,
 				minScale: 0.1,
-				scaleSpeed: 1.2,
-				pinch: true
+				scaleSpeed: 1.2
+			},
+			move: {
+				wheel: true
 			},
 			trashcan: false,
 			sounds: false,
@@ -240,6 +242,7 @@ function createCodePage() {
 	workspace.getToolbox().getFlyout().autoClose = false;
 	workspace.getToolbox().getFlyout().autoHide(false);
 	workspace.registerButtonCallback('newVar', createVarDialog);
+	workspace.registerButtonCallback('newList', createListDialog);
 	wtoolbox.setSelectedItem(wtoolbox.getToolboxItems()[1]);
 	defineFilter(workspace)
 }

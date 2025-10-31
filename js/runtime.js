@@ -1,7 +1,7 @@
 class S2Runtime {
 	constructor(canvas){
 		this.zip = new JSZip();
-		this.Project = {
+		this.EmptyProject = {
 			"objName": "Stage",
 			"variables": [],
 			"lists": [],
@@ -30,9 +30,11 @@ class S2Runtime {
 				"swfVersion": "v461"
 			}
 		}
+		this.Project = this.EmptyProject;
 		this.Images = {"0":"","1":""};
-		this.Sounds = {}
-		this.updateSprites()
+		this.Sounds = {};
+		this.scale = 1.8;
+		this.updateSprites();
 	}
 	newSprite(name, data=""){
 		this.Project.children.push(data == "" ? {
@@ -71,28 +73,37 @@ class S2Runtime {
 		});
 		return names;
 	}
-	getSprite(name){
+	getSprite(name = document.querySelector("div.item.selected").id){
 		return name === "Stage" ? this.Project : this.Project.children.find(obj => obj.objName === name);
 	}
-	getCostume(spritename, name){
+	getCostume(spritename = undefined, name){
 		return this.Images[this.getSprite(spritename).costumes.find(obj => obj.costumeName === name).baseLayerID]; 
 	}
 	setScript(spritename, scriptdata){
-		this.getSprite(spritename).scripts = this.generateScratch2Code(scriptdata);
+		this.getSprite(spritename).scripts = this.convertBlocklyToScratch2(scriptdata);
 	}
-	addCostume(spritename, name, data){
-		this.Project.sprites[spritename].costumes.push({"name":name,"data":data})
+	addCostume(spritename = undefined, name, data){
+		this.getSprite(spritename).push({"name":name,"data":data})
 	}
-	addSound(spritename, name, data){
-		this.Project.sprites[spritename].sounds.push({"name":name,"data":data})
-	}
-	removeCostume(spritename, name){
-		this.Project.sprites[spritename].costumes = this.Project.sprites[spritename].costumes
-														.filter(item => item["name"] !== name);
-	}
-	removeSound(spritename, name){
-		this.Project.sprites[spritename].sounds = this.Project.sprites[spritename].sounds
-													  .filter(item => item["name"] !== name);
+	loadProject(zipdata){
+		this.zip.loadAsync(zipdata).then((zip)=>{
+			document.querySelectorAll("div.library div.item").forEach(function(i){
+				i.classList.remove("selected");
+			});
+			Blockly.serialization.workspaces.load({},workspace);
+			Object.keys(zip.files).filter(obj => obj.endsWith(".png")).forEach((item)=>{
+			    zip.file(item).async("base64").then((content)=>{
+	        		this.Images[item.replace(".png","")] = content;
+	        	});
+	        });
+            zip.file("project.json").async("text").then((json)=>{
+            	Object.assign(this.Project, this.EmptyProject, JSON.parse(json));
+	            this.updateSprites();
+	            document.querySelector("div.library div.item#Stage").click();
+            });
+        }).catch(function(error) {
+            console.error("Error loading ZIP file:", error);
+        });
 	}
 	generateHTMLitem(spritename){
 		const item = document.createElement("div");
@@ -104,7 +115,8 @@ class S2Runtime {
 				i.classList.remove("selected");
 			});
 			document.querySelector(`div.library div.item#${spritename}`).classList.add("selected");
-			Blockly.serialization.workspaces.load(this.generateBlocklyCode(this.getSprite(spritename).scripts), workspace);
+			Blockly.serialization.workspaces.load(this.convertScratch2ToBlockly(this.getSprite(spritename).scripts), workspace);
+			document.querySelector("#costumes_t").innerText = spritename == "Stage" ? "Backdrops" : "Costumes";
 			stageBlockChange.forEach((item)=>{
 				workspace.getToolbox().getToolboxItemById(item + (spritename == "Stage" ? "_stage1" : "_stage0")).show();
 				try {
@@ -121,7 +133,7 @@ class S2Runtime {
 			});
 		});	
 		const preview = document.createElement("img");
-		preview.src = `data:image/png;base64,${this.getSprite(spritename).costumes[0]}`;
+		preview.src = `data:image/png;base64,${this.getCostume(spritename, this.getSprite(spritename).costumes[0].costumeName)}`;
 		const name = document.createElement("span");
 		name.innerText = spritename == "Stage" ? "Stage" : spritename;
 		const infobtn = createIconBtn("infobtn", "images/486_assets.Resources_spriteInfoOff.png", "images/556_assets.Resources_spriteInfoOn.png", 18, 18);
@@ -164,238 +176,259 @@ class S2Runtime {
 				.appendChild(item);
 		});
 	}
+	#findBlockDefinition(type) {
+        for (const category of blocks) {
+            for (const definition of category) {
+                if (definition.type === type) {
+                    return definition;
+                }
+            }
+        }
+        return null;
+    }
+    #generateBlocklyId() {
+        return Math.random().toString(36).substring(2, 12);
+    }
+    #createValueInput(value, check = null) {
+        if (check === "Boolean" && (value === false || value === null)) {
+            return undefined;
+        }
+        if (value === null) {
+            return undefined;
+        }
+        if (Array.isArray(value) && typeof value[0] === 'string') {
+            return { "block": this.#convertScratch2BlockToBlockly(value) };
+        }
+        if (typeof value === 'number' || (!isNaN(Number(value)) && String(value).trim() !== '')) {
+            return {
+                "shadow": {
+                    "type": "math_number",
+                    "id": this.#generateBlocklyId(),
+                    "fields": { "NUM": Number(value) }
+                }
+            };
+        }
+        return {
+            "shadow": {
+                "type": "text",
+                "id": this.#generateBlocklyId(),
+                "fields": { "TEXT": String(value) }
+            }
+        };
+    }
+    #convertScratch2ChainToBlockly(scratchBlockChain, isStatement = true) {
+        if (!scratchBlockChain || scratchBlockChain.length === 0) return [];
+        const actualBlocks = isStatement && Array.isArray(scratchBlockChain[0]) && Array.isArray(scratchBlockChain[0][0]) 
+            ? scratchBlockChain[0] : scratchBlockChain;
+
+        const blocklyChain = [];
+        let nextBlock = null;
+        for (let i = actualBlocks.length - 1; i >= 0; i--) {
+            const scratchBlock = actualBlocks[i];
+            const effectiveScratchBlock = Array.isArray(scratchBlock[0]) ? scratchBlock[0] : scratchBlock;
+            
+            const currentBlock = this.#convertScratch2BlockToBlockly(effectiveScratchBlock, nextBlock);
+            
+            if (currentBlock) {
+                nextBlock = currentBlock; 
+                blocklyChain.unshift(currentBlock);
+            }
+        }
+        return blocklyChain;
+    }
+    #convertScratch2BlockToBlockly(scratchBlock, nextBlocklyBlock = null) {
+        if (!scratchBlock || scratchBlock.length === 0 || typeof scratchBlock[0] !== 'string') return null;
+
+        const blockType = scratchBlock[0];
+        const args = scratchBlock.slice(1);
+        const blockDef = this.#findBlockDefinition(blockType);
+
+        if (!blockDef) {
+            if (blockType === 'xpos' || blockType === 'answer' || blockType === '*' || blockType === 'timeAndDate') {
+                return { "type": blockType, "id": this.#generateBlocklyId() };
+            }
+            console.warn(`Block definition not found for: ${blockType}`);
+            return null;
+        }
+
+        const blocklyBlock = { "type": blockType, "id": this.#generateBlocklyId() };
+
+        const inputs = {};
+        const fields = {};
+        let scratchArgIndex = 0;
+
+        const allArgsDefs = [...(blockDef.args0 || []), ...(blockDef.args1 || [])];
+
+        allArgsDefs.forEach(argDef => {
+            const argName = argDef.name;
+
+            if (argDef.type.startsWith("field_") && argDef.type !== "field_dropdown" && argDef.type !== "field_label_serializable" && argDef.type !== "field_variable") {
+                return;
+            }
+            if (scratchArgIndex >= args.length) return;
+
+            const scratchArgValue = args[scratchArgIndex];
+
+            if (argDef.type === "input_value") {
+                const inputObj = this.#createValueInput(scratchArgValue, argDef.check);
+                if (inputObj) {
+                    inputs[argName] = inputObj;
+                }
+
+            } else if (argDef.type === "input_statement") {
+                if (Array.isArray(scratchArgValue) && scratchArgValue.length > 0) {
+                    const statementChain = this.#convertScratch2ChainToBlockly(scratchArgValue);
+                    if (statementChain.length > 0) {
+                        inputs[argName] = { "block": statementChain[0] };
+                    }
+                }
+            } else if (argDef.type === "field_label_serializable" || argDef.type === "field_dropdown" || argDef.type === "field_variable") {
+                fields[argName] = scratchArgValue;
+            }
+
+            scratchArgIndex++;
+        });
+
+        if (Object.keys(inputs).length > 0) blocklyBlock.inputs = inputs;
+        if (Object.keys(fields).length > 0) blocklyBlock.fields = fields;
+
+        if (nextBlocklyBlock) {
+            blocklyBlock.next = { "block": nextBlocklyBlock };
+        }
+
+        return blocklyBlock;
+    }
+    convertScratch2ToBlockly(scratch2Script) {
+        if (!scratch2Script || scratch2Script.length === 0) {
+            return { "blocks": { "languageVersion": 0, "blocks": [] } };
+        }
+
+        const topLevelBlocks = [];
+
+        scratch2Script.forEach(script => {
+            const x = script[0] * this.scale;
+            const y = script[1] * this.scale;
+            const blockChain = script[2];
+
+            if (!blockChain || blockChain.length === 0) return;
+            
+            const convertedChain = this.#convertScratch2ChainToBlockly(blockChain, false); 
+
+            if (convertedChain.length > 0) {
+                const firstBlock = convertedChain[0];
+                firstBlock.x = x;
+                firstBlock.y = y;
+                topLevelBlocks.push(firstBlock);
+            }
+        });
+
+        return {
+            "blocks": {
+                "languageVersion": 0,
+                "blocks": topLevelBlocks
+            }
+        };
+    }
+
+
+    #extractValueFromInput(blocklyInput, typeCheck) {
+        if (!blocklyInput.shadow && !blocklyInput.block) {
+        	if (typeCheck === "Boolean") return false; // Rule: empty boolean input is false
+            return null;
+        }
+
+        const source = blocklyInput.block || blocklyInput.shadow;
+
+        if (source.type === 'math_number' && source.fields && source.fields.NUM !== undefined) {
+            return source.fields.NUM;
+        }
+        if (source.type === 'text' && source.fields && source.fields.TEXT !== undefined) {
+            return source.fields.TEXT;
+        }
+
+        return this.#convertBlocklyBlockToScratch2(source);
+    }
+    #convertBlocklyBlockToScratch2(blocklyBlock) {
+        const blockType = blocklyBlock.type;
+        const scratch2Array = [blockType];
+        const blockDef = this.#findBlockDefinition(blockType);
+
+        if (!blockDef) {
+            if (blocklyBlock.output) {
+                return [blockType];
+            }
+            console.warn(`Definition not found for block type: ${blockType}`);
+            return [blockType];
+        }
+
+        const allArgsDefs = [...(blockDef.args0 || []), ...(blockDef.args1 || [])];
+
+        for (const argDef of allArgsDefs) {
+            const argName = argDef.name;
+            const blocklyInputs = blocklyBlock.inputs || {};
+            const blocklyFields = blocklyBlock.fields || {};
+
+            if (argDef.type.startsWith("field_") && argDef.type !== "field_dropdown" && argDef.type !== "field_label_serializable" && argDef.type !== "field_variable") {
+                continue;
+            }
+
+            if (argDef.type === "input_value") {
+                const inputData = blocklyInputs[argName];
+                const value = inputData ? this.#extractValueFromInput(inputData, argDef.check) : this.#extractValueFromInput({}, argDef.check);
+                scratch2Array.push(value);
+
+            } else if (argDef.type === "input_statement") {
+                const inputData = blocklyInputs[argName];
+                const statementChain = inputData && inputData.block 
+                    ? this.#convertBlocklyChainToScratch2(inputData.block) 
+                    : null;
+                scratch2Array.push(statementChain);
+
+            } else if (argDef.type === "field_label_serializable" || argDef.type === "field_dropdown" || argDef.type === "field_variable") {
+                const value = blocklyFields[argName] !== undefined ? blocklyFields[argName] : null;
+                scratch2Array.push(value);
+            }
+        }
+        return scratch2Array;
+    }
+    #convertBlocklyChainToScratch2(topBlock) {
+        const chain = [];
+        let currentBlock = topBlock;
+
+        while (currentBlock) {
+            const scratch2Block = this.#convertBlocklyBlockToScratch2(currentBlock);
+            if (scratch2Block) {
+                chain.push(scratch2Block);
+            }
+            currentBlock = currentBlock.next ? currentBlock.next.block : null;
+        }
+        return chain;
+    }
+    convertBlocklyToScratch2(blocklyJson) {
+    	if(blocklyJson.blocks){
+	        const scratch2Script = [];
+	        const topLevelBlocks = blocklyJson.blocks.blocks;
+
+	        for (const block of topLevelBlocks) {
+	            const x = block.x / this.scale || 0;
+	            const y = block.y / this.scale || 0;
+	            
+	            const blockChain = this.#convertBlocklyChainToScratch2(block);
+
+	            if (blockChain.length > 0) {
+	                scratch2Script.push([x, y, blockChain]);
+	            }
+	        }
+
+	        return scratch2Script;
+	    }else{
+	    	return [];
+	    }
+    }
 	generateJSCode(workspace){
 		var code = javascript.javascriptGenerator.workspaceToCode(workspace);
 		code = extractMultipleFunctionBlocks(code, hatBlocks);
 		return code;
-	}
-	generateScratch2Code(code){
-		var originalCode = code;
-		var scripts = [];
-		if(originalCode.blocks){
-			originalCode.blocks.blocks.forEach((item)=>{
-				var script = this.#generateScript(item);
-				scripts.push(script);
-			});
-		};
-		return scripts;
-	}
-	generateBlocklyCode(scratch2Script) {
-	    if (!scratch2Script || scratch2Script.length === 0) {
-	        return { "blocks": { "languageVersion": 0, "blocks": [] } };
-	    }
-
-	    const topLevelBlocks = [];
-
-	    // The Scratch 2 script is an array of top-level script blocks.
-	    scratch2Script.forEach(script => {
-	        // A Scratch 2 script usually starts with: [x, y, [block1, block2, ...]]
-	        const x = script[0];
-	        const y = script[1];
-	        const blockChain = script[2];
-
-	        if (!blockChain || blockChain.length === 0) return;
-
-	        // Process the chain of blocks starting from the end
-	        const convertedChain = this.#convertScratchBlockChainToBlockly(blockChain);
-
-	        if (convertedChain.length > 0) {
-	            const firstBlock = convertedChain[0];
-	            firstBlock.x = x;
-	            firstBlock.y = y;
-	            topLevelBlocks.push(firstBlock);
-	        }
-	    });
-
-	    return {
-	        "blocks": {
-	            "languageVersion": 0,
-	            "blocks": topLevelBlocks
-	        }
-	    };
-	}
-	#generateBlocklyId() {
-	    return Math.random().toString(36).substring(2, 15);
-	}
-	#createValueInput(value) {
-	    // If the value is a nested array, treat it as a reporter block (e.g., ["answer"] or ["xpos"]).
-	    if (Array.isArray(value) && typeof value[0] === 'string') {
-	        return { "block": this.#convertScratchBlockToBlockly(value) };
-	    }
-	    
-	    // If it's a simple number
-	    if (typeof value === 'number' || (!isNaN(Number(value)) && String(value).trim() !== '')) {
-	        return {
-	            "shadow": {
-	                "type": "math_number",
-	                "id": this.#generateBlocklyId(),
-	                "fields": {
-	                    "NUM": Number(value)
-	                }
-	            }
-	        };
-	    }
-	    
-	    // Default to text shadow for other constants (strings)
-	    return {
-	        "shadow": {
-	            "type": "text",
-	            "id": this.#generateBlocklyId(),
-	            "fields": {
-	                "TEXT": String(value)
-	            }
-	        }
-	    };
-	}
-	#createField(fieldName, value) {
-	    let field = {};
-	    field[fieldName] = value;
-	    return field;
-	}
-	#convertScratchBlockToBlockly(scratchBlock, nextBlocklyBlock = null) {
-	    // ... (initial checks and block definition lookup, same as before) ...
-	    if (!scratchBlock || scratchBlock.length === 0 || !scratchBlock[0]) return null;
-	    const blockType = scratchBlock[0];
-	    if (typeof blockType !== 'string') return this.#convertScratchBlockToBlockly(blockType, nextBlocklyBlock);
-	    
-	    const args = scratchBlock.slice(1);
-	    const blockDef = this.#findBlock(blockType);
-
-	    if (!blockDef) { /* ... (fallback/error handling) ... */ }
-
-	    const blocklyBlock = { "type": blockType, "id": this.#generateBlocklyId() };
-
-	    const inputs = {};
-	    const fields = {};
-	    let scratchArgIndex = 0; // Tracks position in the Scratch 2 'args' array
-
-	    const allArgsDefs = [...(blockDef.args0 || []), ...(blockDef.args1 || [])];
-
-	    allArgsDefs.forEach(argDef => {
-	        const argName = argDef.name;
-
-	        // 1. Handle Block-Defined Fields (Images, static text, etc.)
-	        // These fields are defined in the block definition and DO NOT consume a value from the Scratch 2 array.
-	        if (argDef.type.startsWith("field_") && argDef.type !== "field_dropdown") {
-	            // Field type is often just for display (like the turn image) and doesn't need to be set 
-	            // from the Scratch 2 data unless it's a dropdown or an explicit setting. 
-	            // We ignore it and don't increment scratchArgIndex.
-	            return;
-	        }
-
-	        // 2. Consume a value from the Scratch 2 array for Inputs and Settable Fields (Dropdowns)
-	        if (scratchArgIndex >= args.length) return; // Safety check
-
-	        const scratchArgValue = args[scratchArgIndex];
-
-	        if (argDef.type === "input_value") {
-	            // Argument is a value input (e.g., '15' for turnRight:)
-	            inputs[argName] = this.#createValueInput(scratchArgValue);
-
-	        } else if (argDef.type === "input_statement") {
-	            // Argument is a statement input (e.g., the body of doRepeat)
-	            if (Array.isArray(scratchArgValue) && scratchArgValue.length > 0) {
-	                const statementChain = this.#convertScratchBlockChainToBlockly(scratchArgValue);
-	                if (statementChain.length > 0) {
-	                    inputs[argName] = { "block": statementChain[0] };
-	                }
-	            }
-	        } else if (argDef.type.startsWith("field_")) {
-	            // Argument is a settable field (e.g., dropdown like costume name, or a variable name)
-	            fields[argName] = scratchArgValue;
-	        }
-
-	        // CRITICAL: Only advance the Scratch 2 argument index if we actually consumed a value.
-	        scratchArgIndex++;
-	    });
-
-	    // ... (rest of the function remains the same: adding inputs/fields and next pointer) ...
-	    if (Object.keys(inputs).length > 0) blocklyBlock.inputs = inputs;
-	    if (Object.keys(fields).length > 0) blocklyBlock.fields = fields;
-
-	    if (nextBlocklyBlock) {
-	        blocklyBlock.next = { "block": nextBlocklyBlock };
-	    }
-
-	    return blocklyBlock;
-	}
-
-	#convertScratchBlockChainToBlockly(scratchBlockChain) {
-	    if (!scratchBlockChain || scratchBlockChain.length === 0) return [];
-
-	    const blocklyChain = [];
-	    // The statement array might contain blocks directly or be nested in a single top-level array
-	    const actualBlocks = Array.isArray(scratchBlockChain[0][0]) ? scratchBlockChain[0] : scratchBlockChain;
-
-	    // Process the chain from the end to the beginning to correctly set the 'next' pointer
-	    for (let i = actualBlocks.length - 1; i >= 0; i--) {
-	        const scratchBlock = actualBlocks[i];
-	        
-	        const nextBlock = blocklyChain.length > 0 ? blocklyChain[0] : null;
-	        const currentBlock = this.#convertScratchBlockToBlockly(scratchBlock, nextBlock);
-	        
-	        if (currentBlock) {
-	            blocklyChain.unshift(currentBlock); // Add to the beginning of the chain
-	        }
-	    }
-	    return blocklyChain;
-	}
-	#findBlock(block){
-		var output
-		blocks.forEach((i)=>{
-			var foundBlock = i.find(obj => obj.type === block);
-			if (foundBlock) {
-				output = foundBlock
-			}
-		});
-		return output;
-	}
-	#generateScript(block){
-		var script = [[]];
-		var currentBlock = block;
-		var lastBlock = false;
-		var hasOutput = false;
-		if(block.x && block.y){
-			var inInput = false;
-			script = [block.x, block.y, []];
-		}else{
-			var inInput = true;
-		};
-		while(!lastBlock){
-			var blockdef = this.#findBlock(currentBlock.type);
-			if(blockdef.output && !(block.x && block.y)){
-				var hasOutput = true;
-				script.pop()
-			}
-			var block = [];
-			block.push(currentBlock.type);
-			if(currentBlock.fields){
-				Object.values(currentBlock.fields).forEach((item)=>{
-					block.push(item);
-				});
-			}
-			if(currentBlock.inputs){
-				Object.keys(currentBlock.inputs).forEach((item)=>{
-					if(currentBlock.inputs[item].block){
-						block.push(this.#generateScript(currentBlock.inputs[item].block));
-					} else if(currentBlock.inputs[item].shadow){
-						Object.values(currentBlock.inputs[item].shadow.fields).forEach((item)=>{
-							block.push(item);
-						});
-					}
-				});
-			}
-			hasOutput ? script.push(block) : script[script.length-1].push(block);
-			if (currentBlock.next) {
-				currentBlock = currentBlock.next.block;
-			} else {
-				lastBlock = true;
-			}
-		};
-		if(hasOutput && inInput){
-			script = script[script.length-1];
-		}
-		return script;
 	}
 }
 
@@ -551,3 +584,220 @@ class S2Runtime {
 		});
 	}
 }*/
+
+/*
+	generateScratch2Code(code){
+		var originalCode = code;
+		var scripts = [];
+		if(originalCode.blocks){
+			originalCode.blocks.blocks.forEach((item)=>{
+				var script = this.#generateScript(item);
+				scripts.push(script);
+			});
+		};
+		return scripts;
+	}
+	generateBlocklyCode(scratch2Script) {
+	    if (!scratch2Script || scratch2Script.length === 0) {
+	        return { "blocks": { "languageVersion": 0, "blocks": [] } };
+	    }
+
+	    const topLevelBlocks = [];
+
+	    scratch2Script.forEach(script => {
+	        const x = script[0];
+	        const y = script[1];
+	        const blockChain = script[2];
+
+	        if (!blockChain || blockChain.length === 0) return;
+
+	        const convertedChain = this.#convertScratchBlockChainToBlockly(blockChain);
+
+	        if (convertedChain.length > 0) {
+	            const firstBlock = convertedChain[0];
+	            firstBlock.x = x;
+	            firstBlock.y = y;
+	            topLevelBlocks.push(firstBlock);
+	        }
+	    });
+
+	    return {
+	        "blocks": {
+	            "languageVersion": 0,
+	            "blocks": topLevelBlocks
+	        }
+	    };
+	}
+	#generateBlocklyId() {
+	    return Math.random().toString(36).substring(2, 15);
+	}
+	#createValueInput(value) {
+	    if (Array.isArray(value) && typeof value[0] === 'string') {
+	        return { "block": this.#convertScratchBlockToBlockly(value) };
+	    }
+	    
+	    if (typeof value === 'number' || (!isNaN(Number(value)) && String(value).trim() !== '')) {
+	        return {
+	            "shadow": {
+	                "type": "math_number",
+	                "id": this.#generateBlocklyId(),
+	                "fields": {
+	                    "NUM": Number(value)
+	                }
+	            }
+	        };
+	    }
+	    
+	    return {
+	        "shadow": {
+	            "type": "text",
+	            "id": this.#generateBlocklyId(),
+	            "fields": {
+	                "TEXT": String(value)
+	            }
+	        }
+	    };
+	}
+	#createField(fieldName, value) {
+	    let field = {};
+	    field[fieldName] = value;
+	    return field;
+	}
+	#convertScratchBlockToBlockly(scratchBlock, nextBlocklyBlock = null) {
+	    if (!scratchBlock || scratchBlock.length === 0 || !scratchBlock[0]) return null;
+	    const blockType = scratchBlock[0];
+	    if (typeof blockType !== 'string') return this.#convertScratchBlockToBlockly(blockType, nextBlocklyBlock);
+	    
+	    const args = scratchBlock.slice(1);
+	    const blockDef = this.#findBlock(blockType);
+
+	    if (!blockDef) { /* ... (fallback/error handling) ...  }
+
+	    const blocklyBlock = { "type": blockType, "id": this.#generateBlocklyId() };
+
+	    const inputs = {};
+	    const fields = {};
+
+	    const allArgsDefs = [...(blockDef.args0 || []), ...(blockDef.args1 || [])];
+
+	    allArgsDefs.forEach(argDef => {
+	        const argName = argDef.name;
+
+	        if (argDef.type.startsWith("field_") && argDef.type !== "field_dropdown") {
+	            return;
+	        }
+
+
+	        const scratchArgValue = args[scratchArgIndex];
+
+	        if (argDef.type === "input_value") {
+	            inputs[argName] = this.#createValueInput(scratchArgValue);
+
+	        } else if (argDef.type === "input_statement") {
+			    if (Array.isArray(scratchArgValue) && scratchArgValue.length > 0) {
+			        const statementChain = this.#convertScratchBlockChainToBlockly(scratchArgValue);
+			        if (statementChain.length > 0) {
+			            inputs[argName] = { "block": statementChain[0] };
+			        }
+			    }
+			} else if (argDef.type === "field_label_serializable" || argDef.type === "field_dropdown" || argDef.type === "field_variable") {
+	            fields[argName] = scratchArgValue;
+	        }
+
+	        scratchArgIndex++;
+	    });
+
+	    if (Object.keys(inputs).length > 0) blocklyBlock.inputs = inputs;
+	    if (Object.keys(fields).length > 0) blocklyBlock.fields = fields;
+
+	    if (nextBlocklyBlock) {
+	        blocklyBlock.next = { "block": nextBlocklyBlock };
+	    }
+
+	    return blocklyBlock;
+	}
+
+	#convertScratchBlockChainToBlockly(scratchBlockChain) {
+	    if (!scratchBlockChain || scratchBlockChain.length === 0) return [];
+
+	    const actualBlocks = scratchBlockChain; 
+
+	    const blocklyChain = [];
+	    let nextBlock = null;
+
+	    for (let i = actualBlocks.length - 1; i >= 0; i--) {
+	        const scratchBlock = actualBlocks[i];
+	        
+	        const effectiveScratchBlock = Array.isArray(scratchBlock[0]) ? scratchBlock[0] : scratchBlock;
+	        
+	        const currentBlock = this.#convertScratchBlockToBlockly(effectiveScratchBlock, nextBlock);
+	        
+	        if (currentBlock) {
+	            nextBlock = currentBlock; 
+	            blocklyChain.unshift(currentBlock);
+	        }
+	    }
+
+	    return blocklyChain;
+	}
+	#findBlock(scratchType){
+		for (const category of blocks) {
+	        for (const definition of category) {
+	            if (definition.type === scratchType) {
+	                return definition;
+	            }
+	        }
+	    }
+	    return null;
+	}
+	#generateScript(block){
+		var script = [[]];
+		var currentBlock = block;
+		var lastBlock = false;
+		var hasOutput = false;
+		if(block.x && block.y){
+			var inInput = false;
+			script = [block.x, block.y, []];
+		}else{
+			var inInput = true;
+		};
+		while(!lastBlock){
+			var blockdef = this.#findBlock(currentBlock.type);
+			if(blockdef){
+				if(blockdef.output && !(block.x && block.y)){
+					var hasOutput = true;
+					script.pop()
+				}
+				var block = [];
+				block.push(currentBlock.type);
+				if(currentBlock.fields){
+					Object.values(currentBlock.fields).forEach((item)=>{
+						block.push(item);
+					});
+				}
+				if(currentBlock.inputs){
+					Object.keys(currentBlock.inputs).forEach((item)=>{
+						if(currentBlock.inputs[item].block){
+							block.push(this.#generateScript(currentBlock.inputs[item].block));
+						} else if(currentBlock.inputs[item].shadow){
+							Object.values(currentBlock.inputs[item].shadow.fields).forEach((item)=>{
+								block.push(item);
+							});
+						}
+					});
+				}
+				hasOutput ? script.push(block) : script[script.length-1].push(block);
+				if (currentBlock.next) {
+					currentBlock = currentBlock.next.block;
+				} else {
+					lastBlock = true;
+				}
+			}else{
+				return []
+			}
+		};
+		if(hasOutput && inInput){
+			script = script[script.length-1];
+		}
+		return script;
+	}*/

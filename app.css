@@ -10,6 +10,7 @@
 	--panel: #F2F2F2;
 	--border: #D0D1D2;
 	--titlebar: linear-gradient(0deg, var(--tab) 0%, #fff 100%);
+	--titlebardialog: linear-gradient(0deg, var(--itemselected) 0%, #dfdfdf 100%);
 	--off: #8F9193;
 	--arrow: #A6A8AC;
 	--editor: #DDDEDE;
@@ -359,14 +360,47 @@ div.library div.stage div.item.selected {
 	margin-top: 5px;
 }
 
+div.library div.stage button {
+	position: absolute;
+	margin-top: 115px;
+}
+
+div.library div.stage button#backdroplist {
+	margin-left: 5px;
+}
+
+div.library div.stage button#newbackdrop {
+	margin-left: 25px;
+	margin-top: 114px;
+}
+
+div.library div.stage button#uploadbackdrop {
+	margin-left: 38px;
+	margin-top: 113px;
+}
+
+div.library div.stage button#camerabackdrop {
+	margin-left: 58px;
+}
+
+div.library div.stage > span {
+	position: absolute;
+	font-size: 11px;
+	margin-left: 2px;
+	margin-top: 96px;
+}
+
 div.library div.item img {
 	height: 51px;
-	margin-bottom: 4px;
-	width: 68px;
+	margin-bottom: 7px;
+	width: auto;
+	max-width: 68px;
 }
 
 div.library div.stage div.item img {
 	outline: 1px solid var(--border);
+	margin-bottom: 4px;
+	width: 68px;
 }
 
 div.library div.item span {
@@ -479,7 +513,7 @@ button[type="button"]:hover {
 /* blockly flyout */
 
 .blocklyToolbox {
-    height: fit-content !important;
+	height: fit-content !important;
 }
 
 .blocklyFlyout {
@@ -577,12 +611,12 @@ div#app div.dialog {
 	z-index: 9999;
 	width: max-content;
 	height: max-content;
-	padding: 0 5px;
+	padding: 0 10px;
 }
 
 div#app div.dialog > span {
 	align-items: center;
-	background: var(--titlebar);
+	background: var(--titlebardialog);
 	border-bottom: 1px solid var(--border);
 	border-top-left-radius: 8px;
 	border-top-right-radius: 8px;
@@ -590,9 +624,9 @@ div#app div.dialog > span {
 	height: 28px;
 	justify-content: center;
 	text-align: center;
-	width: calc(100% + 10px);
+	width: calc(100% + 20px);
 	position: relative;
-	right: 5px;
+	right: 10px;
 }
 
 div#app div.dialog > div {
@@ -610,8 +644,9 @@ div#app div.dialog footer {
 }
 
 div.dialog footer button {
-	min-width: 56px;
+	min-width: 43px;
 	margin: auto 5px;
+	padding: 4px;
 }
 
 div.dialog input[type="text"] {

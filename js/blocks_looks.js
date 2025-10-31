@@ -74,8 +74,8 @@ const looks_def_blocks = [
       "name": "VALUE1",
       "options": function(){
         options = [];
-        ScratchRuntime.Project.sprites[document.querySelector("div.item.selected").id].costumes.forEach((item)=>{
-          options.push([item.name, item.name]);
+        ScratchRuntime.getSprite().costumes.forEach((item)=>{
+          options.push([item.costumeName, item.costumeName]);
         });
         return options;
       }
@@ -106,8 +106,8 @@ const looks_def_blocks = [
       "name": "VALUE1",
       "options": function(){
         options = [];
-        ScratchRuntime.Project.sprites["_stage_"].costumes.forEach((item)=>{
-          options.push([item.name, item.name]);
+        ScratchRuntime.getSprite("Stage").costumes.forEach((item)=>{
+          options.push([item.costumeName, item.costumeName]);
         });
         options.push(["next backdrop", "_next_"]);
         options.push(["previous backdrop", "_prev_"]);
@@ -126,8 +126,8 @@ const looks_def_blocks = [
       "name": "VALUE1",
       "options": function(){
         options = [];
-        ScratchRuntime.Project.sprites["_stage_"].costumes.forEach((item)=>{
-          options.push([item.name, item.name]);
+        ScratchRuntime.getSprite("Stage").costumes.forEach((item)=>{
+          options.push([item.costumeName, item.costumeName]);
         });
         options.push(["next backdrop", "_next_"]);
         options.push(["previous backdrop", "_prev_"]);
@@ -152,7 +152,6 @@ const looks_def_blocks = [
         [ "mosaic", "mosaic" ],
         [ "brightness", "brightness" ],
         [ "ghost", "ghost" ]
-        
       ]
     },{
       "type": "input_value",
@@ -169,14 +168,13 @@ const looks_def_blocks = [
       "type": "field_dropdown",
       "name": "VALUE1",
       "options": [
-        [ "color", "ITEM1" ],
-        [ "fisheye", "ITEM2" ],
-        [ "whirl", "ITEM3" ],
-        [ "pixelate", "ITEM4" ],
-        [ "mosaic", "ITEM5" ],
-        [ "brightness", "ITEM6" ],
-        [ "ghost", "ITEM7" ]
-        
+        [ "color", "color" ],
+        [ "fisheye", "fisheye" ],
+        [ "whirl", "whirl" ],
+        [ "pixelate", "pixelate" ],
+        [ "mosaic", "mosaic" ],
+        [ "brightness", "brightness" ],
+        [ "ghost", "ghost" ]
       ]
     },{
       "type": "input_value",

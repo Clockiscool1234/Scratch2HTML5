@@ -184,6 +184,19 @@ const operators_def_blocks = [
       "name": "VALUE2"
     }]
   },{
+    "type": "\\\\",
+    "message0": "%1 mod %2",
+    "style": "operators_blocks",
+    "output": "value",
+    "inputsInline": true,
+    "args0": [{
+      "type": "input_value",
+      "name": "VALUE1"
+    }, {
+      "type": "input_value",
+      "name": "VALUE2"
+    }]
+  },{
     "type": "stringLength:",
     "message0": "length of %1",
     "style": "operators_blocks",

@@ -1,6 +1,6 @@
 const data_def_blocks = [
   {
-	"type": "var",
+	"type": "readVariable",
 	"message0": '%1',
 	"args0": [{
 	  "type": "field_label_serializable",
@@ -15,41 +15,43 @@ const data_def_blocks = [
 	"inputsInline": true,
 	"nextStatement": null,
 	"previousStatement": null,
-	"args0": [{
-	  "type": "input_value",
-	  "name": "VALUE1",
-	  "check": "Variable"
-	}, {
+	"args0": [
+		{
       "type": "field_dropdown",
-      "name": "VALUE2",
+      "name": "VALUE1",
       "options": [
         ["x", "X"]
       ]
-    }],
+    },
+    {
+	  	"type": "input_value",
+	  	"name": "VALUE2"
+		}
+	],
 	"style": "data_blocks",
-	"extensions": ["dynamic_menu_extension"]
   }, {
 	"type": "changeVar:by:",
 	"message0": "change %1 by %2",
 	"inputsInline": true,
 	"nextStatement": null,
 	"previousStatement": null,
-	"args0": [{
-	  "type": "input_value",
-	  "name": "VALUE1",
-	  "check": "Variable"
-	}, {
+	"args0": [
+		{
       "type": "field_dropdown",
-      "name": "VALUE2",
+      "name": "VALUE1",
       "options": [
         ["x", "X"]
       ]
-    }],
+    },
+    {
+	  	"type": "input_value",
+	  	"name": "VALUE2"
+		}
+	],
 	"style": "data_blocks",
-	"extensions": ["dynamic_menu_extension"]
   }, {
 	"type": "showVariable:",
-	"message0": "show %1",
+	"message0": "show variable %1",
 	"inputsInline": true,
 	"nextStatement": null,
 	"previousStatement": null,
@@ -61,10 +63,9 @@ const data_def_blocks = [
       ]
     }],
 	"style": "data_blocks",
-	"extensions": ["dynamic_menu_extension"]
   }, {
 	"type": "hideVariable:",
-	"message0": "hide %1",
+	"message0": "hide variable %1",
 	"inputsInline": true,
 	"nextStatement": null,
 	"previousStatement": null,
@@ -76,7 +77,16 @@ const data_def_blocks = [
       ]
     }],
 	"style": "data_blocks",
-	"extensions": ["dynamic_menu_extension"]
+  }, {
+	"type": "contentsOfList:",
+	"message0": '%1',
+	"args0": [{
+	  "type": "field_label_serializable",
+	  "name": "NAME",
+	  "text": "list"
+	}],
+	"style": "data_list_blocks",
+	"output": "Value"
   }, {
 	"type": "append:toList:",
 	"message0": "add %1 to %2",
@@ -87,10 +97,12 @@ const data_def_blocks = [
 	  "type": "input_value",
 	  "name": "VALUE1"
 	}, {
-	  "type": "input_value",
-	  "name": "VALUE2",
-	  "check": "List"
-	}],
+    "type": "field_dropdown",
+    "name": "VALUE2",
+    "options": [
+      ["x", "X"]
+    ]
+  }],
 	"style": "data_list_blocks"
   }, {
 	"type": "deleteLine:ofList:",
@@ -99,18 +111,15 @@ const data_def_blocks = [
 	"nextStatement": null,
 	"previousStatement": null,
 	"args0": [{
-	  "type": "field_dropdown",
-	  "name": "VALUE1",
-	  "options": [
-		["1", "ITEM1"],
-		["last", "ITEM2"],
-		["all", "ITEM3"]
-	  ]
-	}, {
 	  "type": "input_value",
-	  "name": "VALUE2",
-	  "check": "List"
-	}],
+	  "name": "VALUE1"
+	}, {
+    "type": "field_dropdown",
+    "name": "VALUE2",
+    "options": [
+      ["x", "X"]
+    ]
+  }],
 	"style": "data_list_blocks"
   }, {
 	"type": "insert:at:ofList:",
@@ -122,18 +131,15 @@ const data_def_blocks = [
 	  "type": "input_value",
 	  "name": "VALUE1"
 	}, {
-	  "type": "field_dropdown",
-	  "name": "VALUE2",
-	  "options": [
-		["1", "ITEM1"],
-		["last", "ITEM2"],
-		["random", "ITEM3"]
-	  ]
-	}, {
 	  "type": "input_value",
-	  "name": "VALUE3",
-	  "check": "List"
-	}],
+	  "name": "VALUE2"
+	}, {
+    "type": "field_dropdown",
+    "name": "VALUE3",
+    "options": [
+      ["x", "X"]
+    ]
+  }],
 	"style": "data_list_blocks"
   }, {
 	"type": "setLine:ofList:to:",
@@ -142,18 +148,15 @@ const data_def_blocks = [
 	"nextStatement": null,
 	"previousStatement": null,
 	"args0": [{
-	  "type": "field_dropdown",
-	  "name": "VALUE1",
-	  "options": [
-		["1", "ITEM1"],
-		["last", "ITEM2"],
-		["random", "ITEM3"]
-	  ]
-	}, {
 	  "type": "input_value",
-	  "name": "VALUE2",
-	  "check": "List"
+	  "name": "VALUE1"
 	}, {
+    "type": "field_dropdown",
+    "name": "VALUE2",
+    "options": [
+      ["x", "X"]
+    ]
+  }, {
 	  "type": "input_value",
 	  "name": "VALUE3"
 	}],
@@ -162,41 +165,42 @@ const data_def_blocks = [
 	"type": "getLine:ofList:",
 	"message0": "item %1 of %2",
 	"args0": [{
-	  "type": "field_dropdown",
-	  "name": "VALUE1",
-	  "options": [
-		["1", "ITEM1"],
-		["last", "ITEM2"],
-		["random", "ITEM3"]
-	  ]
-	}, {
-	  "type": "field_variable",
+	  "type": "input_value",
 	  "name": "VALUE1"
-	}],
+	}, {
+    "type": "field_dropdown",
+    "name": "VALUE2",
+    "options": [
+      ["x", "X"]
+    ]
+  }],
 	"style": "data_list_blocks",
 	"output": "Value"
   }, {
 	"type": "lineCountOfList:",
 	"message0": "length of %1",
 	"args0": [{
-	  "type": "field_variable",
-	  "name": "VALUE1"
-	}],
+    "type": "field_dropdown",
+    "name": "VALUE1",
+    "options": [
+      ["x", "X"]
+    ]
+  }],
 	"style": "data_list_blocks",
 	"output": "Value"
   }, {
 	"type": "list:contains:",
 	"message0": "%1 contains %2?",
 	"args0": [{
-	  "type": "field_variable",
-	  "name": "VALUE1"
-	}, {
-      "type": "field_dropdown",
-      "name": "VALUE2",
-      "options": [
-        ["x", "X"]
-      ]
-    }],
+    "type": "field_dropdown",
+    "name": "VALUE1",
+    "options": [
+      ["x", "X"]
+    ]
+  }, {
+	  "type": "input_value",
+	  "name": "VALUE2"
+	}],
 	"style": "data_list_blocks",
 	"output": "Boolean"
   }, {
@@ -206,10 +210,12 @@ const data_def_blocks = [
 	"nextStatement": null,
 	"previousStatement": null,
 	"args0": [{
-	  "type": "input_value",
-	  "name": "VALUE1",
-	  "check": "List"
-	}],
+    "type": "field_dropdown",
+    "name": "VALUE1",
+    "options": [
+      ["x", "X"]
+    ]
+  }],
 	"style": "data_list_blocks"
   }, {
 	"type": "hideList:",
@@ -218,10 +224,12 @@ const data_def_blocks = [
 	"nextStatement": null,
 	"previousStatement": null,
 	"args0": [{
-	  "type": "input_value",
-	  "name": "VALUE1",
-	  "check": "List"
-	}],
+    "type": "field_dropdown",
+    "name": "VALUE1",
+    "options": [
+      ["x", "X"]
+    ]
+  }],
 	"style": "data_list_blocks"
   }
 
@@ -237,23 +245,205 @@ const data_blocks = {
 }
 
 var dataCategoryDynamic = function(workspace) {
-	var variableBlocks = []
-	Object.keys(ScratchRuntime.Project.sprites["_stage_"].variables).forEach((i)=>{
-		variableBlocks.push({
-			"kind": "block",
-			"type": "var",
-			"fields": {
-				"NAME": i
-			}
+	var variableBlocks = [
+		{
+			"kind": "button",
+			"text": "Make a Variable",
+			"callbackKey": "newVar"
+		}
+	];
+	if (ScratchRuntime.getSprite("Stage").variables.length > 0) {
+		ScratchRuntime.getSprite("Stage").variables.forEach((i)=>{
+			variableBlocks.push({
+				"kind": "block",
+				"type": "readVariable",
+				"fields": {
+					"NAME": i.name
+				}
+			});
 		});
-	});
-	var blocks =    [
-						{
-							"kind": "button",
-							"text": "Make a Variable",
-							"callbackKey": "newVar"
-				        }
-			    	]
-	blocks = blocks.concat(variableBlocks)
+		variableBlocks = variableBlocks.concat([
+			{
+				"kind": "block",
+				"type": "setVar:to:",
+				"inputs": {
+          "VALUE2": {
+            "shadow": {
+              "type": "math_number",
+              "fields": {
+                "NUM": 0
+              }
+            }
+        	}
+        }
+			},
+			{
+				"kind": "block",
+				"type": "changeVar:by:",
+				"inputs": {
+          "VALUE2": {
+            "shadow": {
+              "type": "math_number",
+              "fields": {
+                "NUM": 1
+              }
+            }
+        	}
+        }
+			},
+			{
+				"kind": "block",
+				"type": "showVariable:"
+			},
+			{
+				"kind": "block",
+				"type": "hideVariable:"
+			}
+		]);
+	};
+	var listBlocks = [
+		{
+			"kind": "button",
+			"text": "Make a List",
+			"callbackKey": "newList"
+		}
+	];
+	if (ScratchRuntime.getSprite("Stage").lists.length > 0) {
+		ScratchRuntime.getSprite("Stage").lists.forEach((i)=>{
+			listBlocks.push({
+				"kind": "block",
+				"type": "contentsOfList:",
+				"fields": {
+					"NAME": i.listName
+				}
+			});
+		});
+		listBlocks = listBlocks.concat([
+			{
+				"kind": "block",
+				"type": "append:toList:",
+				"inputs": {
+          "VALUE1": {
+            "shadow": {
+              "type": "text",
+              "fields": {
+                "TEXT": "thing"
+              }
+            }
+          }
+        }
+			},
+			{
+				"kind": "block",
+				"type": "deleteLine:ofList:",
+				"inputs": {
+          "VALUE1": {
+            "shadow": {
+              "type": "math_number",
+              "fields": {
+                "NUM": 1
+              }
+            }
+        	}
+        }
+			},
+			{
+				"kind": "block",
+				"type": "insert:at:ofList:",
+				"inputs": {
+					"VALUE1": {
+            "shadow": {
+              "type": "text",
+              "fields": {
+                "TEXT": "thing"
+              }
+            }
+          },
+          "VALUE2": {
+            "shadow": {
+              "type": "math_number",
+              "fields": {
+                "NUM": 1
+              }
+            }
+        	}
+        }
+			},
+			{
+				"kind": "block",
+				"type": "setLine:ofList:to:",
+				"inputs": {
+          "VALUE1": {
+            "shadow": {
+              "type": "math_number",
+              "fields": {
+                "NUM": 1
+              }
+            }
+        	},
+        	"VALUE3": {
+            "shadow": {
+              "type": "text",
+              "fields": {
+                "TEXT": "thing"
+              }
+            }
+          }
+        }
+			},
+			{
+				"kind": "block",
+				"type": "getLine:ofList:",
+				"inputs": {
+          "VALUE1": {
+            "shadow": {
+              "type": "math_number",
+              "fields": {
+                "NUM": 1
+              }
+            }
+        	}
+        }
+			},
+			{
+				"kind": "block",
+				"type": "lineCountOfList:"
+			},
+			{
+				"kind": "block",
+				"type": "list:contains:",
+				"inputs": {
+          "VALUE2": {
+            "shadow": {
+              "type": "text",
+              "fields": {
+                "TEXT": "thing"
+              }
+            }
+          }
+        }
+			},
+			{
+				"kind": "block",
+				"type": "showList:"
+			},
+			{
+				"kind": "block",
+				"type": "hideList:"
+			},
+		]);
+	};
+	var blocks = [];
+	blocks = blocks.concat(variableBlocks);
+	blocks = blocks.concat(listBlocks);
 	return blocks;
 }
+
+/*append:toList:", "thing", "list"],
+						["deleteLine:ofList:", 1, "list"],
+						["insert:at:ofList:", "thing", 1, "list"],
+						["setLine:ofList:to:", 1, "list", "thing"]]],
+				[681, 1068, [["getLine:ofList:", 1, "list"]]],
+				[678, 1091.4, [["lineCountOfList:", "list"]]],
+				[681, 1123, [["list:contains:", "list", "thing"]]],
+				[668, 1174, [["showList:", "list"], ["hideList:*/
